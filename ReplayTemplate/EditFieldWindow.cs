@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace ReplayTemplate
 {
-    public partial class Form1 : Form
+    public partial class EditFieldWindow : Form
     {
-        public Form1()
+        public EditFieldWindow()
         {
             InitializeComponent();
         }
