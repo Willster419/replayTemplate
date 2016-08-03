@@ -35,6 +35,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.selectionLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.youtubeEmbedStartTextBox = new System.Windows.Forms.TextBox();
+            this.youtubeEmbedEndTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -67,7 +70,7 @@
             this.templateComboBox.FormattingEnabled = true;
             this.templateComboBox.Location = new System.Drawing.Point(12, 25);
             this.templateComboBox.Name = "templateComboBox";
-            this.templateComboBox.Size = new System.Drawing.Size(354, 21);
+            this.templateComboBox.Size = new System.Drawing.Size(144, 21);
             this.templateComboBox.TabIndex = 2;
             this.templateComboBox.SelectedIndexChanged += new System.EventHandler(this.templateComboBox_SelectedIndexChanged);
             // 
@@ -92,17 +95,47 @@
             // selectionLabel
             // 
             this.selectionLabel.AutoSize = true;
-            this.selectionLabel.Location = new System.Drawing.Point(133, 9);
+            this.selectionLabel.Location = new System.Drawing.Point(69, 9);
             this.selectionLabel.Name = "selectionLabel";
             this.selectionLabel.Size = new System.Drawing.Size(87, 13);
             this.selectionLabel.TabIndex = 8;
             this.selectionLabel.Text = "Nothing selected";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(230, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(107, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Youtube Embed style";
+            // 
+            // youtubeEmbedStartTextBox
+            // 
+            this.youtubeEmbedStartTextBox.Location = new System.Drawing.Point(233, 26);
+            this.youtubeEmbedStartTextBox.Name = "youtubeEmbedStartTextBox";
+            this.youtubeEmbedStartTextBox.ReadOnly = true;
+            this.youtubeEmbedStartTextBox.Size = new System.Drawing.Size(68, 20);
+            this.youtubeEmbedStartTextBox.TabIndex = 10;
+            this.youtubeEmbedStartTextBox.Text = "null";
+            // 
+            // youtubeEmbedEndTextBox
+            // 
+            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(307, 26);
+            this.youtubeEmbedEndTextBox.Name = "youtubeEmbedEndTextBox";
+            this.youtubeEmbedEndTextBox.ReadOnly = true;
+            this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
+            this.youtubeEmbedEndTextBox.TabIndex = 11;
+            this.youtubeEmbedEndTextBox.Text = "null";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 540);
+            this.Controls.Add(this.youtubeEmbedEndTextBox);
+            this.Controls.Add(this.youtubeEmbedStartTextBox);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.selectionLabel);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label1);
@@ -110,6 +143,7 @@
             this.Controls.Add(this.resetThreadButton);
             this.Controls.Add(this.createThreadButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Main Window";
             this.Load += new System.EventHandler(this.MainWindow_Load);
@@ -127,6 +161,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label selectionLabel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox youtubeEmbedStartTextBox;
+        private System.Windows.Forms.TextBox youtubeEmbedEndTextBox;
     }
 }
 

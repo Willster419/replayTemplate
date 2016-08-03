@@ -195,6 +195,9 @@ namespace ReplayTemplate
             Template t = templateList[index];
             //infrom which is selected for verification
             selectionLabel.Text = t.clanName + " selected";
+            //show youtube embed syntax
+            youtubeEmbedStartTextBox.Text = t.youtubeEmbedStartURL;
+            youtubeEmbedEndTextBox.Text = t.youtubeEmbedEndURL;
             //clear the current panel
             while (panel2.Controls.Count != 0)
             {
@@ -236,6 +239,10 @@ namespace ReplayTemplate
 
         private void createSampleREL2Fields()
         {
+            rel2.clanName = "REL2";
+            rel2.threadURL = "http://relicgaming.com/index.php?action=post;board=24.0";
+            rel2.youtubeEmbedStartURL = "[youtube]";
+            rel2.youtubeEmbedEndURL = "[/youtube]";
             rel2.fieldList.Add(new Field("Date",2));
             rel2.fieldList.Add(new Field("Opponent"));
             rel2.fieldList.Add(new Field("Province"));
@@ -250,8 +257,6 @@ namespace ReplayTemplate
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            rel2.clanName = "REL2";
-            rel2.threadURL = "http://relicgaming.com/index.php?action=post;board=24.0";
             this.createSampleREL2Fields();
             templateList.Add(rel2);
             this.updateTemplateComboBox();
@@ -259,7 +264,19 @@ namespace ReplayTemplate
 
         private void templateComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (templateComboBox.Text.Equals("create custom..."))
+            if (templateComboBox.SelectedIndex == -1)
+            {
+                //infrom which is selected for verification
+                selectionLabel.Text = "Nothing selected";
+                //clear the current panel
+                while (panel2.Controls.Count != 0)
+                {
+                    panel2.Controls.RemoveAt(0);
+                }
+                youtubeEmbedStartTextBox.Text = "null";
+                youtubeEmbedEndTextBox.Text = "null";
+            }
+            else if (templateComboBox.Text.Equals("create custom..."))
             {
                 //launch editor
 
@@ -282,13 +299,7 @@ namespace ReplayTemplate
 
         private void resetThreadButton_Click(object sender, EventArgs e)
         {
-            //infrom which is selected for verification
-            selectionLabel.Text = "Nothing selected";
-            //clear the current panel
-            while (panel2.Controls.Count != 0)
-            {
-                panel2.Controls.RemoveAt(0);
-            }
+            templateComboBox.SelectedIndex = -1;
         }
 
         private void editFieldButton_Click(object sender, EventArgs e)
@@ -298,77 +309,84 @@ namespace ReplayTemplate
 
         private void createThreadButton_Click(object sender, EventArgs e)
         {
-            bodySB = new StringBuilder();
-            textOut.body.Text = "";
-            if (templateComboBox.Text.Equals("create custom..."))
+            if (templateComboBox.SelectedIndex == -1)
             {
-
+                //MessageBox.Show("Cannot show black template");
             }
             else
             {
-                //create new UNLINKED LIST
-                this.createNewUnlinkedList();
-                Template t = tempTemplateList[templateComboBox.SelectedIndex];
-                for (int i = 0; i < t.fieldList.Count; i++)
+                bodySB = new StringBuilder();
+                textOut.body.Text = "";
+                if (templateComboBox.Text.Equals("create custom..."))
                 {
-                    Field f = t.fieldList[i];
-                    if (f.type == 3)
+
+                }
+                else
+                {
+                    //create new UNLINKED LIST
+                    this.createNewUnlinkedList();
+                    Template t = tempTemplateList[templateComboBox.SelectedIndex];
+                    for (int i = 0; i < t.fieldList.Count; i++)
                     {
-                        //special case victory/defeat
-                        Panel temp = (Panel)panel2.Controls[i];
-                        RadioButton vic = (RadioButton)temp.Controls[1];
-                        bool b = vic.Checked;
-                        if (b)
+                        Field f = t.fieldList[i];
+                        if (f.type == 3)
                         {
-                            //was victory
-                            t.fieldList[i].value = "Win";
+                            //special case victory/defeat
+                            Panel temp = (Panel)panel2.Controls[i];
+                            RadioButton vic = (RadioButton)temp.Controls[1];
+                            bool b = vic.Checked;
+                            if (b)
+                            {
+                                //was victory
+                                t.fieldList[i].value = "Win";
+                            }
+                            else
+                            {
+                                //was defeat
+                                t.fieldList[i].value = "Loss";
+                            }
+                            t.fieldList[i].name = t.fieldList[i].name + ": ";
+                        }
+                        else if (f.type == 2)
+                        {
+                            //special case date
+                            Panel temp = (Panel)panel2.Controls[i];
+                            Label l = (Label)temp.Controls[1];
+                            string s = l.Text;
+                            t.fieldList[i].name = t.fieldList[i].name + ": ";
+                            t.fieldList[i].value = s;
+                        }
+                        else if (f.type == 4)
+                        {
+                            //special case youtube
+                            Panel temp = (Panel)panel2.Controls[i];
+                            TextBox tb = (TextBox)temp.Controls[1];
+                            string s = tb.Text;
+                            t.fieldList[i].name = t.fieldList[i].name + ": \n";
+                            t.fieldList[i].value = "[youtube]" + s + "[/youtube]";
                         }
                         else
                         {
-                            //was defeat
-                            t.fieldList[i].value = "Loss";
+                            //normal cases
+                            Panel temp = (Panel)panel2.Controls[i];
+                            TextBox tb = (TextBox)temp.Controls[1];
+                            string s = tb.Text;
+                            t.fieldList[i].name = t.fieldList[i].name + ": ";
+                            t.fieldList[i].value = s;
                         }
-                        t.fieldList[i].name = t.fieldList[i].name + ": ";
                     }
-                    else if (f.type == 2)
-                    {
-                        //special case date
-                        Panel temp = (Panel)panel2.Controls[i];
-                        Label l = (Label)temp.Controls[1];
-                        string s = l.Text;
-                        t.fieldList[i].name = t.fieldList[i].name + ": ";
-                        t.fieldList[i].value = s;
-                    }
-                    else if (f.type == 4)
-                    {
-                        //special case youtube
-                        Panel temp = (Panel)panel2.Controls[i];
-                        TextBox tb = (TextBox)temp.Controls[1];
-                        string s = tb.Text;
-                        t.fieldList[i].name = t.fieldList[i].name + ": \n";
-                        t.fieldList[i].value = "[youtube]" + s + "[/youtube]";
-                    }
-                    else
-                    {
-                        //normal cases
-                        Panel temp = (Panel)panel2.Controls[i];
-                        TextBox tb = (TextBox)temp.Controls[1];
-                        string s = tb.Text;
-                        t.fieldList[i].name = t.fieldList[i].name + ": ";
-                        t.fieldList[i].value = s;
-                    }
-                }
-                //build the string
-                //first thread title
+                    //build the string
+                    //first thread title
 
-                //then thread body
-                for (int i = 0; i < t.fieldList.Count; i++)
-                {
-                    bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                    //then thread body
+                    for (int i = 0; i < t.fieldList.Count; i++)
+                    {
+                        bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                    }
+                    //output to window
+                    textOut.body.Text = bodySB.ToString();
+                    textOut.ShowDialog();
                 }
-                //output to window
-                textOut.body.Text = bodySB.ToString();
-                textOut.ShowDialog();
             }
         }
         private void createNewUnlinkedList()
