@@ -40,6 +40,10 @@
             this.youtubeEmbedEndTextBox = new System.Windows.Forms.TextBox();
             this.saveTemplateButton = new System.Windows.Forms.Button();
             this.loadTemplatesButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numFieldsTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.templateTypeTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -89,9 +93,9 @@
             // 
             this.panel2.AutoScroll = true;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Location = new System.Drawing.Point(12, 52);
+            this.panel2.Location = new System.Drawing.Point(12, 91);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(354, 447);
+            this.panel2.Size = new System.Drawing.Size(354, 408);
             this.panel2.TabIndex = 7;
             // 
             // selectionLabel
@@ -106,7 +110,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(230, 9);
+            this.label2.Location = new System.Drawing.Point(86, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 13);
             this.label2.TabIndex = 9;
@@ -114,7 +118,7 @@
             // 
             // youtubeEmbedStartTextBox
             // 
-            this.youtubeEmbedStartTextBox.Location = new System.Drawing.Point(233, 26);
+            this.youtubeEmbedStartTextBox.Location = new System.Drawing.Point(89, 65);
             this.youtubeEmbedStartTextBox.Name = "youtubeEmbedStartTextBox";
             this.youtubeEmbedStartTextBox.ReadOnly = true;
             this.youtubeEmbedStartTextBox.Size = new System.Drawing.Size(68, 20);
@@ -123,7 +127,7 @@
             // 
             // youtubeEmbedEndTextBox
             // 
-            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(307, 26);
+            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(163, 65);
             this.youtubeEmbedEndTextBox.Name = "youtubeEmbedEndTextBox";
             this.youtubeEmbedEndTextBox.ReadOnly = true;
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
@@ -132,7 +136,6 @@
             // 
             // saveTemplateButton
             // 
-            this.saveTemplateButton.Enabled = false;
             this.saveTemplateButton.Location = new System.Drawing.Point(78, 505);
             this.saveTemplateButton.Name = "saveTemplateButton";
             this.saveTemplateButton.Size = new System.Drawing.Size(83, 23);
@@ -143,7 +146,6 @@
             // 
             // loadTemplatesButton
             // 
-            this.loadTemplatesButton.Enabled = false;
             this.loadTemplatesButton.Location = new System.Drawing.Point(167, 505);
             this.loadTemplatesButton.Name = "loadTemplatesButton";
             this.loadTemplatesButton.Size = new System.Drawing.Size(83, 23);
@@ -152,11 +154,51 @@
             this.loadTemplatesButton.UseVisualStyleBackColor = true;
             this.loadTemplatesButton.Click += new System.EventHandler(this.loadTemplatesButton_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(10, 49);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "# of fields";
+            // 
+            // numFieldsTextBox
+            // 
+            this.numFieldsTextBox.Location = new System.Drawing.Point(12, 65);
+            this.numFieldsTextBox.Name = "numFieldsTextBox";
+            this.numFieldsTextBox.ReadOnly = true;
+            this.numFieldsTextBox.Size = new System.Drawing.Size(23, 20);
+            this.numFieldsTextBox.TabIndex = 15;
+            this.numFieldsTextBox.Text = "null";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(241, 49);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(27, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "type";
+            // 
+            // templateTypeTextBox
+            // 
+            this.templateTypeTextBox.Location = new System.Drawing.Point(244, 65);
+            this.templateTypeTextBox.Name = "templateTypeTextBox";
+            this.templateTypeTextBox.ReadOnly = true;
+            this.templateTypeTextBox.Size = new System.Drawing.Size(100, 20);
+            this.templateTypeTextBox.TabIndex = 17;
+            this.templateTypeTextBox.Text = "null";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 540);
+            this.Controls.Add(this.templateTypeTextBox);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.numFieldsTextBox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.loadTemplatesButton);
             this.Controls.Add(this.saveTemplateButton);
             this.Controls.Add(this.youtubeEmbedEndTextBox);
@@ -192,6 +234,10 @@
         private System.Windows.Forms.TextBox youtubeEmbedEndTextBox;
         private System.Windows.Forms.Button saveTemplateButton;
         private System.Windows.Forms.Button loadTemplatesButton;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox numFieldsTextBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox templateTypeTextBox;
     }
 }
 

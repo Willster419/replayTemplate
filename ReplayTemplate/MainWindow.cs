@@ -197,6 +197,8 @@ namespace ReplayTemplate
             //show youtube embed syntax
             youtubeEmbedStartTextBox.Text = t.youtubeEmbedStartURL;
             youtubeEmbedEndTextBox.Text = t.youtubeEmbedEndURL;
+            numFieldsTextBox.Text = "" + t.numFields;
+            templateTypeTextBox.Text = t.templateType;
             //clear the current panel
             while (panel2.Controls.Count != 0)
             {
@@ -401,6 +403,8 @@ namespace ReplayTemplate
             selectionLabel.Text = "Nothing selected";
             youtubeEmbedStartTextBox.Text = "null";
             youtubeEmbedEndTextBox.Text = "null";
+            numFieldsTextBox.Text = "null";
+            templateTypeTextBox.Text = "null";
         }
 
         private void saveTemplates()
@@ -424,6 +428,8 @@ namespace ReplayTemplate
                     templateWriter.WriteElementString("threadURL", templateList[i].threadURL);
                     templateWriter.WriteElementString("youtubeEmbedStartURL", templateList[i].youtubeEmbedStartURL);
                     templateWriter.WriteElementString("youtubeEmbedEndURL", templateList[i].youtubeEmbedEndURL);
+                    templateWriter.WriteElementString("numFields", "" + templateList[i].numFields);
+                    templateWriter.WriteElementString("templateType", templateList[i].templateType);
                     templateWriter.WriteStartElement("fields");
                     for (int j = 0; j < templateList[i].fieldList.Count; j++)
                     {
@@ -476,9 +482,16 @@ namespace ReplayTemplate
                                 case "youtubeEmbedEndURL":
                                     t.youtubeEmbedEndURL = templateReader.ReadString();
                                     break;
+                                case "numFields":
+                                    t.numFields = int.Parse(templateReader.ReadString());
+                                    break;
+                                case "templateType":
+                                    t.templateType = templateReader.ReadString();
+                                    break;
                                 //fields HAS to be the last thing read from each template node for this to work
                                 case "fields":
                                     {
+                                        int numFieldsAdded = 0;
                                         Field f = new Field("null");
                                         templateReader.Read();
                                         while (templateReader.Read())
@@ -505,8 +518,10 @@ namespace ReplayTemplate
                                                     {
                                                         //add field to list and reset temp field
                                                         if (f.name != "null") t.fieldList.Add(f);
-                                                        if (f.name.Equals("Battle"))
+                                                        numFieldsAdded++;
+                                                        if (numFieldsAdded == t.numFields)
                                                         {
+                                                            //all fields added
                                                             needToBreak = true;
                                                         }
                                                         f = new Field("null");

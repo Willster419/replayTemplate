@@ -11,6 +11,8 @@ namespace ReplayTemplate
         public string clanName { get; set; }
         public string youtubeEmbedStartURL { get; set; }
         public string youtubeEmbedEndURL { get; set; }
+        public int numFields { get; set; }
+        public string templateType { get; set; }
         public List<Field> fieldList;
         public Template()
         {
