@@ -323,9 +323,8 @@ namespace ReplayTemplate
                 }
                 else
                 {
-                    //create new UNLINKED LIST
-                    this.createNewUnlinkedList();
-                    Template t = tempTemplateList[templateComboBox.SelectedIndex];
+                    //create new UNLINKED template
+                    Template t = this.createUnlinkedTemplate(templateList[templateComboBox.SelectedIndex]);
                     for (int i = 0; i < t.fieldList.Count; i++)
                     {
                         Field f = t.fieldList[i];
@@ -333,6 +332,8 @@ namespace ReplayTemplate
                         {
                             //special case victory/defeat
                             Panel temp = (Panel)panel2.Controls[i];
+                            Label lName = (Label)temp.Controls[0];
+                            string name = lName.Text;
                             RadioButton vic = (RadioButton)temp.Controls[1];
                             bool b = vic.Checked;
                             if (b)
@@ -345,34 +346,40 @@ namespace ReplayTemplate
                                 //was defeat
                                 t.fieldList[i].value = "Loss";
                             }
-                            t.fieldList[i].name = t.fieldList[i].name + ": ";
+                            t.fieldList[i].name = name + ": ";
                         }
                         else if (f.type == 2)
                         {
                             //special case date
                             Panel temp = (Panel)panel2.Controls[i];
-                            Label l = (Label)temp.Controls[1];
-                            string s = l.Text;
-                            t.fieldList[i].name = t.fieldList[i].name + ": ";
-                            t.fieldList[i].value = s;
+                            Label lName = (Label)temp.Controls[0];
+                            string name = lName.Text;
+                            Label lValue = (Label)temp.Controls[1];
+                            string value = lValue.Text;
+                            t.fieldList[i].name = name + ": ";
+                            t.fieldList[i].value = value;
                         }
                         else if (f.type == 4)
                         {
                             //special case youtube
                             Panel temp = (Panel)panel2.Controls[i];
+                            Label lName = (Label)temp.Controls[0];
+                            string name = lName.Text;
                             TextBox tb = (TextBox)temp.Controls[1];
-                            string s = tb.Text;
-                            t.fieldList[i].name = t.fieldList[i].name + ": \n";
-                            t.fieldList[i].value = "[youtube]" + s + "[/youtube]";
+                            string value = tb.Text;
+                            t.fieldList[i].name = name + ": \n";
+                            t.fieldList[i].value = "[youtube]" + value + "[/youtube]";
                         }
                         else
                         {
                             //normal cases
                             Panel temp = (Panel)panel2.Controls[i];
+                            Label lName = (Label)temp.Controls[0];
+                            string name = lName.Text;
                             TextBox tb = (TextBox)temp.Controls[1];
-                            string s = tb.Text;
-                            t.fieldList[i].name = t.fieldList[i].name + ": ";
-                            t.fieldList[i].value = s;
+                            string value = tb.Text;
+                            t.fieldList[i].name = name + ": ";
+                            t.fieldList[i].value = value;
                         }
                     }
                     //build the string
@@ -389,23 +396,15 @@ namespace ReplayTemplate
                 }
             }
         }
-        private void createNewUnlinkedList()
+        private Template createUnlinkedTemplate(Template temp)
         {
-            tempTemplateList = new List<Template>();
-            foreach (Template temp in templateList)
-            {
-                Template newTemp = new Template();
-                newTemp.clanName = temp.clanName;
-                for (int i = 0; i < temp.fieldList.Count; i++)
-                {
-                    Field f = new Field(temp.fieldList[i].name, temp.fieldList[i].type);
-                    f.value = temp.fieldList[i].value;
-                    newTemp.fieldList.Add(f);
-                }
-                newTemp.fieldList = temp.fieldList;
-                newTemp.threadURL = temp.threadURL;
-                tempTemplateList.Add(newTemp);
-            }
+            Template t = new Template();
+            t.clanName = temp.clanName;
+            t.fieldList = new List<Field>(temp.fieldList);
+            t.threadURL = temp.threadURL;
+            t.youtubeEmbedEndURL = temp.youtubeEmbedEndURL;
+            t.youtubeEmbedStartURL = temp.youtubeEmbedStartURL;
+            return t;
         }
     }
 }
