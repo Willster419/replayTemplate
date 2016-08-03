@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.createThreadButton = new System.Windows.Forms.Button();
-            this.resetThreadButton = new System.Windows.Forms.Button();
+            this.resetUIButton = new System.Windows.Forms.Button();
             this.uploadDownloadWorker = new System.ComponentModel.BackgroundWorker();
             this.templateComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -38,6 +38,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.youtubeEmbedStartTextBox = new System.Windows.Forms.TextBox();
             this.youtubeEmbedEndTextBox = new System.Windows.Forms.TextBox();
+            this.saveTemplateButton = new System.Windows.Forms.Button();
+            this.loadTemplatesButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -50,15 +52,15 @@
             this.createThreadButton.UseVisualStyleBackColor = true;
             this.createThreadButton.Click += new System.EventHandler(this.createThreadButton_Click);
             // 
-            // resetThreadButton
+            // resetUIButton
             // 
-            this.resetThreadButton.Location = new System.Drawing.Point(12, 505);
-            this.resetThreadButton.Name = "resetThreadButton";
-            this.resetThreadButton.Size = new System.Drawing.Size(75, 23);
-            this.resetThreadButton.TabIndex = 1;
-            this.resetThreadButton.Text = "reset";
-            this.resetThreadButton.UseVisualStyleBackColor = true;
-            this.resetThreadButton.Click += new System.EventHandler(this.resetThreadButton_Click);
+            this.resetUIButton.Location = new System.Drawing.Point(12, 505);
+            this.resetUIButton.Name = "resetUIButton";
+            this.resetUIButton.Size = new System.Drawing.Size(60, 23);
+            this.resetUIButton.TabIndex = 1;
+            this.resetUIButton.Text = "reset";
+            this.resetUIButton.UseVisualStyleBackColor = true;
+            this.resetUIButton.Click += new System.EventHandler(this.resetUIButton_Click);
             // 
             // uploadDownloadWorker
             // 
@@ -128,11 +130,35 @@
             this.youtubeEmbedEndTextBox.TabIndex = 11;
             this.youtubeEmbedEndTextBox.Text = "null";
             // 
+            // saveTemplateButton
+            // 
+            this.saveTemplateButton.Enabled = false;
+            this.saveTemplateButton.Location = new System.Drawing.Point(78, 505);
+            this.saveTemplateButton.Name = "saveTemplateButton";
+            this.saveTemplateButton.Size = new System.Drawing.Size(83, 23);
+            this.saveTemplateButton.TabIndex = 12;
+            this.saveTemplateButton.Text = "save template";
+            this.saveTemplateButton.UseVisualStyleBackColor = true;
+            this.saveTemplateButton.Click += new System.EventHandler(this.saveTemplateButton_Click);
+            // 
+            // loadTemplatesButton
+            // 
+            this.loadTemplatesButton.Enabled = false;
+            this.loadTemplatesButton.Location = new System.Drawing.Point(167, 505);
+            this.loadTemplatesButton.Name = "loadTemplatesButton";
+            this.loadTemplatesButton.Size = new System.Drawing.Size(83, 23);
+            this.loadTemplatesButton.TabIndex = 13;
+            this.loadTemplatesButton.Text = "load templates";
+            this.loadTemplatesButton.UseVisualStyleBackColor = true;
+            this.loadTemplatesButton.Click += new System.EventHandler(this.loadTemplatesButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 540);
+            this.Controls.Add(this.loadTemplatesButton);
+            this.Controls.Add(this.saveTemplateButton);
             this.Controls.Add(this.youtubeEmbedEndTextBox);
             this.Controls.Add(this.youtubeEmbedStartTextBox);
             this.Controls.Add(this.label2);
@@ -140,7 +166,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.templateComboBox);
-            this.Controls.Add(this.resetThreadButton);
+            this.Controls.Add(this.resetUIButton);
             this.Controls.Add(this.createThreadButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -155,7 +181,7 @@
         #endregion
 
         private System.Windows.Forms.Button createThreadButton;
-        private System.Windows.Forms.Button resetThreadButton;
+        private System.Windows.Forms.Button resetUIButton;
         private System.ComponentModel.BackgroundWorker uploadDownloadWorker;
         private System.Windows.Forms.ComboBox templateComboBox;
         private System.Windows.Forms.Label label1;
@@ -164,6 +190,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox youtubeEmbedStartTextBox;
         private System.Windows.Forms.TextBox youtubeEmbedEndTextBox;
+        private System.Windows.Forms.Button saveTemplateButton;
+        private System.Windows.Forms.Button loadTemplatesButton;
     }
 }
 

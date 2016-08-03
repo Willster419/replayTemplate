@@ -7,14 +7,6 @@ namespace ReplayTemplate
 {
     class Field
     {
-        public static int DELIMITER = 3;
-        public static int PANEL_WIDTH = 330;
-        public static int PANEL_HEIGHT = 45;
-        public static int TEXTBOX_LOCATION_Y = 20;
-        public static int LABEL_WIDTH = 50;
-        public static int LABEL_HEIGHT = 13;
-        public static int TEXTBOX_SIZE_WIDTH = 300;
-        public static int TEXTBOX_SIZE_HEIGHT = 20;
         public string name { get; set; }
         public int type { get; set; }
         public string value { get; set; }

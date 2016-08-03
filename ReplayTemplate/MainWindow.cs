@@ -10,6 +10,7 @@ using System.Web;
 using System.Xml;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace ReplayTemplate
 {
@@ -38,15 +39,13 @@ namespace ReplayTemplate
         //private Panel FieldPanel = new Panel() { Width = PANEL_WIDTH, Height = PANEL_HEIGHT, BorderStyle = BorderStyle.FixedSingle };
         private EditFieldWindow edit = new EditFieldWindow();
         private TextOutputWindow textOut = new TextOutputWindow();
+        private XmlTextWriter templateWriter;
+        private XmlTextReader templateReader;
+        string saveFile = Path.GetDirectoryName(Application.ExecutablePath) + "\\templateLists.xml";
+        string savePath = Path.GetDirectoryName(Application.ExecutablePath);
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //DEBUG ONLY
-            //this.addStandard(new Field("test"));
         }
 
         private void addStandard(Field f)
@@ -149,7 +148,7 @@ namespace ReplayTemplate
             dateLocation.Y = TEXTBOX_LOCATION_Y;
             dateLabel.Location = dateLocation;
             dateLabel.Size = textBoxSize;
-            dateLabel.Text = String.Format("{0:MM/dd/yy}",date);
+            dateLabel.Text = String.Format("{0:MM/dd/yy}", date);
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(dateLabel);
@@ -190,7 +189,7 @@ namespace ReplayTemplate
             panel2.Controls.Add(p);
         }
 
-        private void displayTemplate(int index)
+        private void displaySelectedTemplate(int index)
         {
             Template t = templateList[index];
             //infrom which is selected for verification
@@ -237,46 +236,18 @@ namespace ReplayTemplate
             }
         }
 
-        private void createSampleREL2Fields()
-        {
-            rel2.clanName = "REL2";
-            rel2.threadURL = "http://relicgaming.com/index.php?action=post;board=24.0";
-            rel2.youtubeEmbedStartURL = "[youtube]";
-            rel2.youtubeEmbedEndURL = "[/youtube]";
-            rel2.fieldList.Add(new Field("Date",2));
-            rel2.fieldList.Add(new Field("Opponent"));
-            rel2.fieldList.Add(new Field("Province"));
-            rel2.fieldList.Add(new Field("Map"));
-            rel2.fieldList.Add(new Field("FC"));
-            rel2.fieldList.Add(new Field("Strat"));
-            rel2.fieldList.Add(new Field("Strat",4));
-            rel2.fieldList.Add(new Field("Result",3));
-            rel2.fieldList.Add(new Field("Replay File"));
-            rel2.fieldList.Add(new Field("Battle",4));
-        }
-
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            this.createSampleREL2Fields();
-            templateList.Add(rel2);
-            this.updateTemplateComboBox();
+            this.loadTemplates();
         }
 
         private void templateComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (templateComboBox.SelectedIndex == -1)
             {
-                //infrom which is selected for verification
-                selectionLabel.Text = "Nothing selected";
-                //clear the current panel
-                while (panel2.Controls.Count != 0)
-                {
-                    panel2.Controls.RemoveAt(0);
-                }
-                youtubeEmbedStartTextBox.Text = "null";
-                youtubeEmbedEndTextBox.Text = "null";
+                //do nothing
             }
-            else if (templateComboBox.Text.Equals("create custom..."))
+            else if (templateComboBox.Text.Equals("create/edit custom template..."))
             {
                 //launch editor
 
@@ -284,22 +255,13 @@ namespace ReplayTemplate
             else
             {
                 //load template
-                this.displayTemplate(templateComboBox.SelectedIndex);
+                this.displaySelectedTemplate(templateComboBox.SelectedIndex);
             }
-        }
-        //updates template combo box with list of templates
-        private void updateTemplateComboBox()
-        {
-            for (int i = 0; i < templateList.Count; i++)
-            {
-                templateComboBox.Items.Add(templateList[i]);
-            }
-            templateComboBox.Items.Add("create custom...");
         }
 
-        private void resetThreadButton_Click(object sender, EventArgs e)
+        private void resetUIButton_Click(object sender, EventArgs e)
         {
-            templateComboBox.SelectedIndex = -1;
+            this.resetUI();
         }
 
         private void editFieldButton_Click(object sender, EventArgs e)
@@ -405,6 +367,171 @@ namespace ReplayTemplate
             t.youtubeEmbedEndURL = temp.youtubeEmbedEndURL;
             t.youtubeEmbedStartURL = temp.youtubeEmbedStartURL;
             return t;
+        }
+
+        private void saveTemplateButton_Click(object sender, EventArgs e)
+        {
+            this.saveTemplates();
+        }
+
+        private void loadTemplatesButton_Click(object sender, EventArgs e)
+        {
+            this.loadTemplates();
+        }
+
+        private void resetUI()
+        {
+            //clear display panel
+            while (panel2.Controls.Count != 0)
+            {
+                panel2.Controls.RemoveAt(0);
+            }
+            //reload comboBox items
+            while (templateComboBox.Items.Count != 0)
+            {
+                templateComboBox.Items.RemoveAt(0);
+            }
+            for (int i = 0; i < templateList.Count; i++)
+            {
+                templateComboBox.Items.Add(templateList[i]);
+            }
+            templateComboBox.Items.Add("create/edit custom template...");
+            //reset selection
+            templateComboBox.SelectedIndex = -1;
+            selectionLabel.Text = "Nothing selected";
+            youtubeEmbedStartTextBox.Text = "null";
+            youtubeEmbedEndTextBox.Text = "null";
+        }
+
+        private void saveTemplates()
+        {
+            if (templateComboBox.SelectedIndex == -1)
+            {
+
+            }
+            else
+            {
+                if (File.Exists(saveFile)) File.Delete(saveFile);
+                templateWriter = new XmlTextWriter(saveFile, Encoding.UTF8);
+                templateWriter.Formatting = Formatting.Indented;
+                templateWriter.WriteStartDocument();
+                templateWriter.WriteStartElement(Path.GetFileName(saveFile));
+                templateWriter.WriteStartElement("templates");
+                for (int i = 0; i < templateList.Count; i++)
+                {
+                    templateWriter.WriteStartElement("template");
+                    templateWriter.WriteElementString("clanName", templateList[i].clanName);
+                    templateWriter.WriteElementString("threadURL", templateList[i].threadURL);
+                    templateWriter.WriteElementString("youtubeEmbedStartURL", templateList[i].youtubeEmbedStartURL);
+                    templateWriter.WriteElementString("youtubeEmbedEndURL", templateList[i].youtubeEmbedEndURL);
+                    templateWriter.WriteStartElement("fields");
+                    for (int j = 0; j < templateList[i].fieldList.Count; j++)
+                    {
+                        Field f = templateList[i].fieldList[j];
+                        templateWriter.WriteStartElement("field");
+                        templateWriter.WriteElementString("name", f.name);
+                        templateWriter.WriteElementString("type", "" + f.type);
+                        templateWriter.WriteEndElement();
+                    }
+                    templateWriter.WriteEndElement();
+                }
+                templateWriter.WriteEndElement();
+                templateWriter.WriteEndElement();
+                templateWriter.Close();
+            }
+        }
+
+        private void loadTemplates()
+        {
+            templateComboBox.SelectedIndex = -1;
+            templateList = new List<Template>();
+            templateReader = new XmlTextReader(saveFile);
+            Template t = new Template();
+            templateReader.Read();
+            templateReader.Read();
+            templateReader.Read();
+            templateReader.Read();
+            templateReader.Read();
+            templateReader.Read();
+            while (templateReader.Read())
+            {
+                if (templateReader.Name.Equals("template"))
+                {
+                    while (templateReader.Read())
+                    {
+                        if (templateReader.IsStartElement())
+                        {
+                            switch (templateReader.Name)
+                            {
+                                //parse everything into temp template
+                                case "clanName":
+                                    t.clanName = templateReader.ReadString();
+                                    break;
+                                case "threadURL":
+                                    t.threadURL = templateReader.ReadString();
+                                    break;
+                                case "youtubeEmbedStartURL":
+                                    t.youtubeEmbedStartURL = templateReader.ReadString();
+                                    break;
+                                case "youtubeEmbedEndURL":
+                                    t.youtubeEmbedEndURL = templateReader.ReadString();
+                                    break;
+                                //fields HAS to be the last thing read from each template node for this to work
+                                case "fields":
+                                    {
+                                        Field f = new Field("null");
+                                        templateReader.Read();
+                                        while (templateReader.Read())
+                                        {
+                                            bool needToBreak = false;
+                                            if (templateReader.Name.Equals("field"))
+                                            {
+                                                while (templateReader.Read())
+                                                {
+                                                    //if (templateReader.IsStartElement())
+                                                    //{
+                                                    switch (templateReader.Name)
+                                                    {
+                                                        case "name":
+                                                            f.name = templateReader.ReadString();
+                                                            break;
+                                                        //type HAS to be last thing read from each field node for this to work
+                                                        case "type":
+                                                            f.type = int.Parse(templateReader.ReadString());
+                                                            break;
+                                                    }
+                                                    //}
+                                                    if (templateReader.Name.Equals("type"))
+                                                    {
+                                                        //add field to list and reset temp field
+                                                        if (f.name != "null") t.fieldList.Add(f);
+                                                        if (f.name.Equals("Battle"))
+                                                        {
+                                                            needToBreak = true;
+                                                        }
+                                                        f = new Field("null");
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            if (needToBreak) break;
+                                        }
+                                        break;
+                                    }
+                            }
+                        }
+                        if (templateReader.Name.Equals("fields"))
+                        {
+                            //add the template to list and reset the temp template
+                            templateList.Add(t);
+                            t = new Template();
+                            break;
+                        }
+                    }
+                }
+            }
+            templateReader.Close();
+            this.resetUI();
         }
     }
 }
