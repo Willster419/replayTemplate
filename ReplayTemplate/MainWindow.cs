@@ -11,11 +11,20 @@ using System.Xml;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
+using System.Net;
 
 namespace ReplayTemplate
 {
     public partial class MainWindow : Form
     {
+        /*
+         * TODO:
+         * add sorting to template list (later)
+         * create editor (later)
+         * start caching the history of previous entries (soon)
+         * put titles in as well
+         * ?
+         * */
         private string version = "Alpha 1";
         private static int DELIMITER = 3;
         private static int PANEL_WIDTH = 330;
@@ -41,11 +50,83 @@ namespace ReplayTemplate
         private TextOutputWindow textOut = new TextOutputWindow();
         private XmlTextWriter templateWriter;
         private XmlTextReader templateReader;
-        string saveFile = Path.GetDirectoryName(Application.ExecutablePath) + "\\templateLists.xml";
-        string savePath = Path.GetDirectoryName(Application.ExecutablePath);
+        string tempPath;
+        string templateFile;
+        string tempPath2;
+        private TemplateEditorWindow TEW = new TemplateEditorWindow();
+        private WebClient client = new WebClient();
+        private UpdateWindow uw = new UpdateWindow();
+        private PleaseWait pw = new PleaseWait("please wait");
+        bool debug = false;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void parsePaths()
+        {
+            tempPath2 = Application.StartupPath;
+            tempPath = Path.GetTempPath() + "\\ReplayTemplate";
+            //uncomment the below string for debug mode
+            debug = true;
+            if (debug) tempPath = tempPath2;
+            templateFile = tempPath + "\\templateLists.xml";
+        }
+
+        private void checkForUpdates()
+        {
+            if (debug)
+            {
+
+            }
+            else
+            {
+                if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
+                //download version.txt
+                client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/version.txt", tempPath + "\\version.txt");
+                string newVersion = File.ReadAllText(tempPath + "\\version.txt");
+                if (newVersion.Equals(version))
+                {
+                    //up to date
+                }
+                else
+                {
+                    //download updateNotes.txt
+                    client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/updateNotes.txt", tempPath + "\\updateNotes.txt");
+                    //prompt user
+                    uw.updateNotesRTB.Text = "Version_" + newVersion + ":\n" + File.ReadAllText(tempPath + "\\updateNotes.txt");
+                    uw.updateAvailableLabel.Text = "An update is available: " + newVersion;
+                    uw.ShowDialog();
+                    if (uw.update)
+                    {
+                        //download new version
+                        client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/ReplayTemplate.exe", tempPath + "\\replayTemplate V_" + newVersion + ".exe");
+                        //open new one
+                        System.Diagnostics.Process.Start(tempPath + "\\replayTemplate V_" + newVersion + ".exe");
+                        //close this one
+                        this.Close();
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+            }
+        }
+
+        private void checkForFiles()
+        {
+            if (debug)
+            {
+
+            }
+            else
+            {
+                //delete templates xml if it exists
+                if (File.Exists(tempPath + "\\templateLists.xml")) File.Delete(tempPath + "\\templateLists.xml");
+                //download latest
+                client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/templateLists.xml", tempPath + "\\templateLists.xml");
+            }
         }
 
         private void addStandard(Field f)
@@ -193,12 +274,12 @@ namespace ReplayTemplate
         {
             Template t = templateList[index];
             //infrom which is selected for verification
-            selectionLabel.Text = t.clanName + " selected";
+            selectionLabel.Text = "[" + t.clanName + "] selected";
             //show youtube embed syntax
             youtubeEmbedStartTextBox.Text = t.youtubeEmbedStartURL;
             youtubeEmbedEndTextBox.Text = t.youtubeEmbedEndURL;
             numFieldsTextBox.Text = "" + t.numFields;
-            templateTypeTextBox.Text = t.templateType;
+            templateTypeTextBox.Text = "" + t.templateType;
             //clear the current panel
             while (panel2.Controls.Count != 0)
             {
@@ -236,11 +317,64 @@ namespace ReplayTemplate
                     this.Close();
                 }
             }
+            //empty battle combo box selection
+            while (numBattlesComboBox.Items.Count != 0)
+            {
+                numBattlesComboBox.Items.RemoveAt(0);
+            }
+            //set match battle type textBox and re-fill battle number combo box
+            //1=single, 2=landing, 3=StrongHold
+            if (t.templateType == 1)
+            {
+                templateTypeTextBox.Text = "single";
+                numBattlesComboBox.Items.Add("1");
+                numBattlesComboBox.SelectedIndex = 0;
+                numBattlesComboBox.Enabled = false;
+            }
+            if (t.templateType == 2)
+            {
+                templateTypeTextBox.Text = "landing";
+                numBattlesComboBox.Items.Add("2");
+                numBattlesComboBox.Items.Add("3");
+                numBattlesComboBox.Items.Add("4");
+                numBattlesComboBox.Items.Add("5");
+                numBattlesComboBox.SelectedIndex = 0;
+                numBattlesComboBox.Enabled = true;
+            }
+            if (t.templateType == 3)
+            {
+                templateTypeTextBox.Text = "stronghold";
+                numBattlesComboBox.Items.Add("3");
+                numBattlesComboBox.Items.Add("4");
+                numBattlesComboBox.Items.Add("5");
+                numBattlesComboBox.SelectedIndex = 0;
+                numBattlesComboBox.Enabled = true;
+            }
+
+            //match number battles
+            //use above to determine allowed range of battles
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            pw.setMessage("parsing paths");
+            pw.Show();
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(100);
+            this.parsePaths();
+            pw.setMessage("Checking for updates...");
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(100);
+            this.checkForUpdates();
+            pw.setMessage("Checking for files...");
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(100);
+            this.checkForFiles();
+            pw.setMessage("Loading templates...");
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(100);
             this.loadTemplates();
+            pw.Close();
         }
 
         private void templateComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -252,7 +386,8 @@ namespace ReplayTemplate
             else if (templateComboBox.Text.Equals("create/edit custom template..."))
             {
                 //launch editor
-
+                TEW.ShowDialog();
+                this.resetUI();
             }
             else
             {
@@ -273,7 +408,7 @@ namespace ReplayTemplate
 
         private void createThreadButton_Click(object sender, EventArgs e)
         {
-            if (templateComboBox.SelectedIndex == -1)
+            if (templateComboBox.SelectedIndex == -1 || numBattlesComboBox.SelectedIndex == -1)
             {
                 //MessageBox.Show("Cannot show black template");
             }
@@ -354,12 +489,16 @@ namespace ReplayTemplate
                     {
                         bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
                     }
+                    //add version information
+                    bodySB.Append("Created using ReplayTemplate V_" + version);
                     //output to window
                     textOut.body.Text = bodySB.ToString();
+                    textOut.passClanUrl(t.threadURL);
                     textOut.ShowDialog();
                 }
             }
         }
+
         private Template createUnlinkedTemplate(Template temp)
         {
             Template t = new Template();
@@ -405,6 +544,13 @@ namespace ReplayTemplate
             youtubeEmbedEndTextBox.Text = "null";
             numFieldsTextBox.Text = "null";
             templateTypeTextBox.Text = "null";
+            //empty battle combo box selection
+            while (numBattlesComboBox.Items.Count != 0)
+            {
+                numBattlesComboBox.Items.RemoveAt(0);
+            }
+            numBattlesComboBox.Enabled = false;
+
         }
 
         private void saveTemplates()
@@ -415,11 +561,11 @@ namespace ReplayTemplate
             }
             else
             {
-                if (File.Exists(saveFile)) File.Delete(saveFile);
-                templateWriter = new XmlTextWriter(saveFile, Encoding.UTF8);
+                if (File.Exists(templateFile)) File.Delete(templateFile);
+                templateWriter = new XmlTextWriter(templateFile, Encoding.UTF8);
                 templateWriter.Formatting = Formatting.Indented;
                 templateWriter.WriteStartDocument();
-                templateWriter.WriteStartElement(Path.GetFileName(saveFile));
+                templateWriter.WriteStartElement(Path.GetFileName(templateFile));
                 templateWriter.WriteStartElement("templates");
                 for (int i = 0; i < templateList.Count; i++)
                 {
@@ -429,7 +575,7 @@ namespace ReplayTemplate
                     templateWriter.WriteElementString("youtubeEmbedStartURL", templateList[i].youtubeEmbedStartURL);
                     templateWriter.WriteElementString("youtubeEmbedEndURL", templateList[i].youtubeEmbedEndURL);
                     templateWriter.WriteElementString("numFields", "" + templateList[i].numFields);
-                    templateWriter.WriteElementString("templateType", templateList[i].templateType);
+                    templateWriter.WriteElementString("templateType", "" + templateList[i].templateType);
                     templateWriter.WriteStartElement("fields");
                     for (int j = 0; j < templateList[i].fieldList.Count; j++)
                     {
@@ -451,7 +597,7 @@ namespace ReplayTemplate
         {
             templateComboBox.SelectedIndex = -1;
             templateList = new List<Template>();
-            templateReader = new XmlTextReader(saveFile);
+            templateReader = new XmlTextReader(templateFile);
             Template t = new Template();
             templateReader.Read();
             templateReader.Read();
@@ -486,7 +632,7 @@ namespace ReplayTemplate
                                     t.numFields = int.Parse(templateReader.ReadString());
                                     break;
                                 case "templateType":
-                                    t.templateType = templateReader.ReadString();
+                                    t.templateType = int.Parse(templateReader.ReadString());
                                     break;
                                 //fields HAS to be the last thing read from each template node for this to work
                                 case "fields":
@@ -547,6 +693,11 @@ namespace ReplayTemplate
             }
             templateReader.Close();
             this.resetUI();
+        }
+
+        private void numBattlesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

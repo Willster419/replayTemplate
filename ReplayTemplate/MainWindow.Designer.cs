@@ -44,6 +44,8 @@
             this.numFieldsTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.templateTypeTextBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numBattlesComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -110,7 +112,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(86, 49);
+            this.label2.Location = new System.Drawing.Point(57, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 13);
             this.label2.TabIndex = 9;
@@ -118,7 +120,7 @@
             // 
             // youtubeEmbedStartTextBox
             // 
-            this.youtubeEmbedStartTextBox.Location = new System.Drawing.Point(89, 65);
+            this.youtubeEmbedStartTextBox.Location = new System.Drawing.Point(60, 65);
             this.youtubeEmbedStartTextBox.Name = "youtubeEmbedStartTextBox";
             this.youtubeEmbedStartTextBox.ReadOnly = true;
             this.youtubeEmbedStartTextBox.Size = new System.Drawing.Size(68, 20);
@@ -127,7 +129,7 @@
             // 
             // youtubeEmbedEndTextBox
             // 
-            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(163, 65);
+            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(134, 65);
             this.youtubeEmbedEndTextBox.Name = "youtubeEmbedEndTextBox";
             this.youtubeEmbedEndTextBox.ReadOnly = true;
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
@@ -159,9 +161,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(10, 49);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.Size = new System.Drawing.Size(41, 13);
             this.label3.TabIndex = 14;
-            this.label3.Text = "# of fields";
+            this.label3.Text = "# fields";
             // 
             // numFieldsTextBox
             // 
@@ -175,7 +177,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(241, 49);
+            this.label4.Location = new System.Drawing.Point(204, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 13);
             this.label4.TabIndex = 16;
@@ -183,18 +185,46 @@
             // 
             // templateTypeTextBox
             // 
-            this.templateTypeTextBox.Location = new System.Drawing.Point(244, 65);
+            this.templateTypeTextBox.Location = new System.Drawing.Point(207, 66);
             this.templateTypeTextBox.Name = "templateTypeTextBox";
             this.templateTypeTextBox.ReadOnly = true;
-            this.templateTypeTextBox.Size = new System.Drawing.Size(100, 20);
+            this.templateTypeTextBox.Size = new System.Drawing.Size(73, 20);
             this.templateTypeTextBox.TabIndex = 17;
             this.templateTypeTextBox.Text = "null";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(298, 49);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "# battles";
+            // 
+            // numBattlesComboBox
+            // 
+            this.numBattlesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.numBattlesComboBox.FormattingEnabled = true;
+            this.numBattlesComboBox.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.numBattlesComboBox.Location = new System.Drawing.Point(301, 65);
+            this.numBattlesComboBox.Name = "numBattlesComboBox";
+            this.numBattlesComboBox.Size = new System.Drawing.Size(34, 21);
+            this.numBattlesComboBox.TabIndex = 19;
+            this.numBattlesComboBox.SelectedIndexChanged += new System.EventHandler(this.numBattlesComboBox_SelectedIndexChanged);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 540);
+            this.Controls.Add(this.numBattlesComboBox);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.templateTypeTextBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numFieldsTextBox);
@@ -238,6 +268,8 @@
         private System.Windows.Forms.TextBox numFieldsTextBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox templateTypeTextBox;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox numBattlesComboBox;
     }
 }
 

@@ -11,6 +11,7 @@ namespace ReplayTemplate
 {
     public partial class TextOutputWindow : Form
     {
+        private string clanURL;
         public TextOutputWindow()
         {
             InitializeComponent();
@@ -19,6 +20,16 @@ namespace ReplayTemplate
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(clanURL);
+        }
+
+        public void passClanUrl(string URL)
+        {
+            clanURL = URL;
         }
     }
 }

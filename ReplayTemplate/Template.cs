@@ -12,7 +12,8 @@ namespace ReplayTemplate
         public string youtubeEmbedStartURL { get; set; }
         public string youtubeEmbedEndURL { get; set; }
         public int numFields { get; set; }
-        public string templateType { get; set; }
+        public int templateType { get; set; }
+        //1=single, 2=landing, 3=stronghold
         public List<Field> fieldList;
         public Template()
         {
@@ -20,7 +21,10 @@ namespace ReplayTemplate
         }
         public override string ToString()
         {
-            return clanName;
+            if(templateType == 1) return "[" + clanName + "] - " + "single";
+            else if(templateType == 2) return "[" + clanName + "] - " + "landing";
+            else if (templateType == 3) return "[" + clanName + "] - " + "stronghold";
+            else return null;
         }
     }
 }
