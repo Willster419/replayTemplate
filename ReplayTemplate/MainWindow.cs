@@ -953,6 +953,7 @@ namespace ReplayTemplate
             {
                 //process series/landing battles
                 battleCount = numBattlesComboBox.SelectedIndex + 2;
+            }
                 //get the origional length of each item in the temp list. don't run it if the index didn't change
                 int currentTemplateComboBoxSelectedIndex = templateComboBox.SelectedIndex;
                 if (currentTemplateComboBoxSelectedIndex == lastTemplateComboBoxSelectedIndex)
@@ -1006,7 +1007,7 @@ namespace ReplayTemplate
                         }
                     }
                 }
-            }
+            
             lastSelected = int.Parse(numBattlesComboBox.Text);
             lastTemplateComboBoxSelectedIndex = templateComboBox.SelectedIndex;
         }
