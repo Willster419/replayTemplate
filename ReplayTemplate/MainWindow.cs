@@ -22,10 +22,9 @@ namespace ReplayTemplate
          * add sorting to template list (later)
          * create editor (later)
          * start caching the history of previous entries (soon)
-         * put titles in as well
-         * order tabs
-         * fix problem with outputDisplay
-         * look at allowing expansion/resizable windows
+         * put titles in as well(now)
+         * order tabs(now)
+         * look at allowing expansion/resizable windows(soon)
          * */
         private string version = "Alpha 3";
         private static int DELIMITER = 3;
