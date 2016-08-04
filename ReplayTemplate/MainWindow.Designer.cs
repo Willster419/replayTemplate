@@ -99,6 +99,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(354, 408);
             this.panel2.TabIndex = 7;
+            this.panel2.TabStop = true;
             // 
             // selectionLabel
             // 
@@ -125,6 +126,7 @@
             this.youtubeEmbedStartTextBox.ReadOnly = true;
             this.youtubeEmbedStartTextBox.Size = new System.Drawing.Size(68, 20);
             this.youtubeEmbedStartTextBox.TabIndex = 10;
+            this.youtubeEmbedStartTextBox.TabStop = false;
             this.youtubeEmbedStartTextBox.Text = "null";
             // 
             // youtubeEmbedEndTextBox
@@ -134,6 +136,7 @@
             this.youtubeEmbedEndTextBox.ReadOnly = true;
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
             this.youtubeEmbedEndTextBox.TabIndex = 11;
+            this.youtubeEmbedEndTextBox.TabStop = false;
             this.youtubeEmbedEndTextBox.Text = "null";
             // 
             // saveTemplateButton
@@ -171,7 +174,8 @@
             this.numFieldsTextBox.Name = "numFieldsTextBox";
             this.numFieldsTextBox.ReadOnly = true;
             this.numFieldsTextBox.Size = new System.Drawing.Size(23, 20);
-            this.numFieldsTextBox.TabIndex = 15;
+            this.numFieldsTextBox.TabIndex = 0;
+            this.numFieldsTextBox.TabStop = false;
             this.numFieldsTextBox.Text = "null";
             // 
             // label4
@@ -190,6 +194,7 @@
             this.templateTypeTextBox.ReadOnly = true;
             this.templateTypeTextBox.Size = new System.Drawing.Size(73, 20);
             this.templateTypeTextBox.TabIndex = 17;
+            this.templateTypeTextBox.TabStop = false;
             this.templateTypeTextBox.Text = "null";
             // 
             // label5

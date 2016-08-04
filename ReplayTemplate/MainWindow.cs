@@ -23,6 +23,8 @@ namespace ReplayTemplate
          * create editor (later)
          * start caching the history of previous entries (soon)
          * put titles in as well
+         * order tabs
+         * fix problem with outputDisplay
          * ?
          * */
         private string version = "Alpha 1";
@@ -58,6 +60,13 @@ namespace ReplayTemplate
         private UpdateWindow uw = new UpdateWindow();
         private PleaseWait pw = new PleaseWait("please wait");
         bool debug = false;
+        int battleCount = 1;
+        private Template displayTemplate;
+        //our first bool hack
+        private bool firstTimeLandingStronghold = true;
+        int lastSelected = 0;
+        int lastTemplateComboBoxSelectedIndex = -1;
+        private List<int> origionalLengths = new List<int>();
         public MainWindow()
         {
             InitializeComponent();
@@ -129,10 +138,12 @@ namespace ReplayTemplate
             }
         }
 
-        private void addStandard(Field f)
+        private void addStandard(Field f, string name)
         {
             //setup the panel
             Panel p = new Panel();
+            p.TabStop = true;
+            if (f.duplicate) p.BackColor = SystemColors.ControlDark;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
             Point panelLocation = new Point();
@@ -144,7 +155,7 @@ namespace ReplayTemplate
             p.Location = panelLocation;
             //setup the label in the panel
             Label l = new Label();
-            l.Text = f.name;
+            l.Text = name;
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -163,10 +174,14 @@ namespace ReplayTemplate
             panel2.Controls.Add(p);
         }
 
-        private void addVictoryDefeat()
+        private void addVictoryDefeat(Field f, string name)
         {
+            victory = new RadioButton() { Text = "Win", TabStop = true, TabIndex = 2 };
+            defeat = new RadioButton() { Text = "Loss", TabStop = true, TabIndex = 1 };
             //setup the panel
             Panel p = new Panel();
+            p.TabStop = true;
+            if (f.duplicate) p.BackColor = SystemColors.ControlDark;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
             Point panelLocation = new Point();
@@ -178,7 +193,7 @@ namespace ReplayTemplate
             p.Location = panelLocation;
             //setup the label in the panel
             Label l = new Label();
-            l.Text = "Result";
+            l.Text = name;
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -200,10 +215,11 @@ namespace ReplayTemplate
             panel2.Controls.Add(p);
         }
 
-        private void addDate()
+        private void addDate(string name)
         {
             //setup the panel
             Panel p = new Panel();
+            p.TabStop = true;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
             Point panelLocation = new Point();
@@ -215,7 +231,7 @@ namespace ReplayTemplate
             p.Location = panelLocation;
             //setup the label in the panel
             Label l = new Label();
-            l.Text = "Date";
+            l.Text = name;
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -236,10 +252,12 @@ namespace ReplayTemplate
             panel2.Controls.Add(p);
         }
 
-        private void addYoutube(Field f)
+        private void addYoutube(Field f, string name)
         {
             //setup the panel
             Panel p = new Panel();
+            p.TabStop = true;
+            if (f.duplicate) p.BackColor = SystemColors.ControlDark;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
             Point panelLocation = new Point();
@@ -251,7 +269,7 @@ namespace ReplayTemplate
             p.Location = panelLocation;
             //setup the label in the panel
             Label l = new Label();
-            l.Text = f.name + " (Youtube)";
+            l.Text = name + " (Youtube)";
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -272,43 +290,44 @@ namespace ReplayTemplate
 
         private void displaySelectedTemplate(int index)
         {
-            Template t = templateList[index];
+            firstTimeLandingStronghold = true;
+            displayTemplate = templateList[index];
             //infrom which is selected for verification
-            selectionLabel.Text = "[" + t.clanName + "] selected";
+            selectionLabel.Text = "[" + displayTemplate.clanName + "] selected";
             //show youtube embed syntax
-            youtubeEmbedStartTextBox.Text = t.youtubeEmbedStartURL;
-            youtubeEmbedEndTextBox.Text = t.youtubeEmbedEndURL;
-            numFieldsTextBox.Text = "" + t.numFields;
-            templateTypeTextBox.Text = "" + t.templateType;
+            youtubeEmbedStartTextBox.Text = displayTemplate.youtubeEmbedStartURL;
+            youtubeEmbedEndTextBox.Text = displayTemplate.youtubeEmbedEndURL;
+            numFieldsTextBox.Text = "" + displayTemplate.numFields;
+            templateTypeTextBox.Text = "" + displayTemplate.templateType;
             //clear the current panel
             while (panel2.Controls.Count != 0)
             {
                 panel2.Controls.RemoveAt(0);
             }
             //fill panel
-            for (int i = 0; i < t.fieldList.Count; i++)
+            for (int i = 0; i < displayTemplate.fieldList.Count; i++)
             {
-                Field f = t.fieldList[i];
+                Field f = displayTemplate.fieldList[i];
                 int selection = f.type;
                 if (selection == 1)
                 {
                     //standard
-                    this.addStandard(f);
+                    this.addStandard(f, f.name);
                 }
                 else if (selection == 2)
                 {
                     //date
-                    this.addDate();
+                    this.addDate(f.name);
                 }
                 else if (selection == 3)
                 {
                     //victoryDefeat
-                    this.addVictoryDefeat();
+                    this.addVictoryDefeat(f,f.name);
                 }
                 else if (selection == 4)
                 {
                     //youtube
-                    this.addYoutube(f);
+                    this.addYoutube(f,f.name);
                 }
                 else
                 {
@@ -324,14 +343,15 @@ namespace ReplayTemplate
             }
             //set match battle type textBox and re-fill battle number combo box
             //1=single, 2=landing, 3=StrongHold
-            if (t.templateType == 1)
+            if (displayTemplate.templateType == 1)
             {
                 templateTypeTextBox.Text = "single";
                 numBattlesComboBox.Items.Add("1");
                 numBattlesComboBox.SelectedIndex = 0;
                 numBattlesComboBox.Enabled = false;
+                battleCount = 1;
             }
-            if (t.templateType == 2)
+            if (displayTemplate.templateType == 2)
             {
                 templateTypeTextBox.Text = "landing";
                 numBattlesComboBox.Items.Add("2");
@@ -341,7 +361,7 @@ namespace ReplayTemplate
                 numBattlesComboBox.SelectedIndex = 0;
                 numBattlesComboBox.Enabled = true;
             }
-            if (t.templateType == 3)
+            if (displayTemplate.templateType == 3)
             {
                 templateTypeTextBox.Text = "stronghold";
                 numBattlesComboBox.Items.Add("3");
@@ -582,9 +602,11 @@ namespace ReplayTemplate
                         Field f = templateList[i].fieldList[j];
                         templateWriter.WriteStartElement("field");
                         templateWriter.WriteElementString("name", f.name);
+                        templateWriter.WriteElementString("duplicate", "" + f.duplicate);
                         templateWriter.WriteElementString("type", "" + f.type);
                         templateWriter.WriteEndElement();
                     }
+                    templateWriter.WriteEndElement();
                     templateWriter.WriteEndElement();
                 }
                 templateWriter.WriteEndElement();
@@ -654,6 +676,9 @@ namespace ReplayTemplate
                                                         case "name":
                                                             f.name = templateReader.ReadString();
                                                             break;
+                                                        case "duplicate":
+                                                            f.duplicate = bool.Parse(templateReader.ReadString());
+                                                            break;
                                                         //type HAS to be last thing read from each field node for this to work
                                                         case "type":
                                                             f.type = int.Parse(templateReader.ReadString());
@@ -697,7 +722,111 @@ namespace ReplayTemplate
 
         private void numBattlesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            int currentBattle = 1;
+            
+            List<Field> tempList = new List<Field>();
+            //copy all duplicate fields to second list
+            for (int i = 0; i < displayTemplate.fieldList.Count; i++)
+            {
+                if (displayTemplate.fieldList[i].duplicate)
+                {
+                    //add to second list
+                    tempList.Add(displayTemplate.fieldList[i]);
+                }
+            }
+            //remove all duplicate fields from gui
+            if (firstTimeLandingStronghold)
+            {
+                for (int i = 0; i < displayTemplate.fieldList.Count; i++)
+                {
+                    if (displayTemplate.fieldList[i].duplicate)
+                    {
+                        //remove from gui
+                        panel2.Controls.RemoveAt(panel2.Controls.Count - 1);
+                    }
+                }
+                firstTimeLandingStronghold = false;
+            }
+            else
+            {
+                int limit = 0;
+                for (int i = 0; i < displayTemplate.fieldList.Count; i++)
+                {
+                    if (displayTemplate.fieldList[i].duplicate)
+                    {
+                        limit++;
+                    }
+                }
+                limit = limit * lastSelected;
+                for (int i = 0; i < limit; i++)
+                {
+                        //remove from gui
+                        panel2.Controls.RemoveAt(panel2.Controls.Count - 1);
+                }
+            }
+            
+            //determine if landing or stronghold
+            if (templateTypeTextBox.Text.Equals("stronghold"))
+            {
+                //process stronghold battles
+                battleCount = numBattlesComboBox.SelectedIndex + 3;
+            }
+            else
+            {
+                //process series/landing battles
+                battleCount = numBattlesComboBox.SelectedIndex + 2;
+                //get the origional length of each item in the temp list. don't run it if the index didn't change
+                int currentTemplateComboBoxSelectedIndex = templateComboBox.SelectedIndex;
+                if (currentTemplateComboBoxSelectedIndex == lastTemplateComboBoxSelectedIndex)
+                {
+                    //don't run it
+                }
+                else
+                {
+                    //run it
+                    origionalLengths = new List<int>();
+                    foreach (Field f in tempList)
+                    {
+                        origionalLengths.Add(f.name.Length);
+                    }
+                }
+                //for each battle, for each item in the array, add it to the list
+                for (int i = currentBattle; i < battleCount+1; i++)
+                {
+                    for (int j = 0; j < tempList.Count; j++)
+                    {
+                        int selection = tempList[j].type;
+                        if (selection == 1)
+                        {
+                            //standard
+                            this.addStandard(tempList[j], tempList[j].name + " " + i);
+                        }
+                        else if (selection == 2)
+                        {
+                            //date
+                            this.addDate(tempList[j].name + " " + i);
+                        }
+                        else if (selection == 3)
+                        {
+                            //victoryDefeat
+                            this.addVictoryDefeat(tempList[j], tempList[j].name + " " + i);
+                        }
+                        else if (selection == 4)
+                        {
+                            //youtube
+                            this.addYoutube(tempList[j], tempList[j].name + " " + i);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Database error. The program can continue not and must exit.");
+                            //this.Dispose();
+                            this.Close();
+                        }
+                    }
+                }
+            }
+            lastSelected = int.Parse(numBattlesComboBox.Text);
+            lastTemplateComboBoxSelectedIndex = templateComboBox.SelectedIndex;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace ReplayTemplate
         public int type { get; set; }
         public string value { get; set; }
         //1=standard, 2=date, 3=victoryDefeat, 4=youtube
+        public bool duplicate { get; set; }
         public Field(string fieldName, int fieldType = 1)
         {
             name = fieldName;
