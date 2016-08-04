@@ -25,9 +25,9 @@ namespace ReplayTemplate
          * put titles in as well
          * order tabs
          * fix problem with outputDisplay
-         * ?
+         * look at allowing expansion/resizable windows
          * */
-        private string version = "Alpha 1";
+        private string version = "Alpha 3";
         private static int DELIMITER = 3;
         private static int PANEL_WIDTH = 330;
         private static int PANEL_HEIGHT = 45;
@@ -322,12 +322,12 @@ namespace ReplayTemplate
                 else if (selection == 3)
                 {
                     //victoryDefeat
-                    this.addVictoryDefeat(f,f.name);
+                    this.addVictoryDefeat(f, f.name);
                 }
                 else if (selection == 4)
                 {
                     //youtube
-                    this.addYoutube(f,f.name);
+                    this.addYoutube(f, f.name);
                 }
                 else
                 {
@@ -444,70 +444,249 @@ namespace ReplayTemplate
                 {
                     //create new UNLINKED template
                     Template t = this.createUnlinkedTemplate(templateList[templateComboBox.SelectedIndex]);
-                    for (int i = 0; i < t.fieldList.Count; i++)
+                    //create list of single fields
+                    List<Field> singleFields = new List<Field>();
+                    //create list of double fields
+                    List<Field> doubleFields = new List<Field>();
+                    if (t.templateType == 1)
                     {
-                        Field f = t.fieldList[i];
-                        if (f.type == 3)
+                        //single type template
+                        for (int i = 0; i < t.fieldList.Count; i++)
                         {
-                            //special case victory/defeat
-                            Panel temp = (Panel)panel2.Controls[i];
-                            Label lName = (Label)temp.Controls[0];
-                            string name = lName.Text;
-                            RadioButton vic = (RadioButton)temp.Controls[1];
-                            bool b = vic.Checked;
-                            if (b)
+                            Field f = t.fieldList[i];
+                            if (f.type == 3)
                             {
-                                //was victory
-                                t.fieldList[i].value = "Win";
+                                //special case victory/defeat
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                RadioButton vic = (RadioButton)temp.Controls[1];
+                                bool b = vic.Checked;
+                                if (b)
+                                {
+                                    //was victory
+                                    t.fieldList[i].value = "Win";
+                                }
+                                else
+                                {
+                                    //was defeat
+                                    t.fieldList[i].value = "Loss";
+                                }
+                                t.fieldList[i].name = name + ": ";
+                            }
+                            else if (f.type == 2)
+                            {
+                                //special case date
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                Label lValue = (Label)temp.Controls[1];
+                                string value = lValue.Text;
+                                t.fieldList[i].name = name + ": ";
+                                t.fieldList[i].value = value;
+                            }
+                            else if (f.type == 4)
+                            {
+                                //special case youtube
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                TextBox tb = (TextBox)temp.Controls[1];
+                                string value = tb.Text;
+                                t.fieldList[i].name = name + ": \n";
+                                t.fieldList[i].value = "[youtube]" + value + "[/youtube]";
                             }
                             else
                             {
-                                //was defeat
-                                t.fieldList[i].value = "Loss";
+                                //normal cases
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                TextBox tb = (TextBox)temp.Controls[1];
+                                string value = tb.Text;
+                                t.fieldList[i].name = name + ": ";
+                                t.fieldList[i].value = value;
                             }
-                            t.fieldList[i].name = name + ": ";
                         }
-                        else if (f.type == 2)
+                    }
+                    else
+                    {
+                        //series or stronghold type template
+
+                        //compile list of each
+                        foreach (Field f in t.fieldList)
                         {
-                            //special case date
-                            Panel temp = (Panel)panel2.Controls[i];
-                            Label lName = (Label)temp.Controls[0];
-                            string name = lName.Text;
-                            Label lValue = (Label)temp.Controls[1];
-                            string value = lValue.Text;
-                            t.fieldList[i].name = name + ": ";
-                            t.fieldList[i].value = value;
+                            if (!f.duplicate)
+                            {
+                                //is single field
+                                singleFields.Add(f);
+                            }
+                            else
+                            {
+                                //is double field
+                                doubleFields.Add(f);
+                            }
                         }
-                        else if (f.type == 4)
+                        //run through list of single fields
+                        //single type template
+                        for (int i = 0; i < singleFields.Count; i++)
                         {
-                            //special case youtube
-                            Panel temp = (Panel)panel2.Controls[i];
-                            Label lName = (Label)temp.Controls[0];
-                            string name = lName.Text;
-                            TextBox tb = (TextBox)temp.Controls[1];
-                            string value = tb.Text;
-                            t.fieldList[i].name = name + ": \n";
-                            t.fieldList[i].value = "[youtube]" + value + "[/youtube]";
+                            Field f = singleFields[i];
+                            if (f.type == 3)
+                            {
+                                //special case victory/defeat
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                RadioButton vic = (RadioButton)temp.Controls[1];
+                                bool b = vic.Checked;
+                                if (b)
+                                {
+                                    //was victory
+                                    singleFields[i].value = "Win";
+                                }
+                                else
+                                {
+                                    //was defeat
+                                    singleFields[i].value = "Loss";
+                                }
+                                singleFields[i].name = name + ": ";
+                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                            }
+                            else if (f.type == 2)
+                            {
+                                //special case date
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                Label lValue = (Label)temp.Controls[1];
+                                string value = lValue.Text;
+                                singleFields[i].name = name + ": ";
+                                singleFields[i].value = value;
+                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                            }
+                            else if (f.type == 4)
+                            {
+                                //special case youtube
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                TextBox tb = (TextBox)temp.Controls[1];
+                                string value = tb.Text;
+                                singleFields[i].name = name + ": \n";
+                                singleFields[i].value = "[youtube]" + value + "[/youtube]";
+                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                            }
+                            else
+                            {
+                                //normal cases
+                                Panel temp = (Panel)panel2.Controls[i];
+                                Label lName = (Label)temp.Controls[0];
+                                string name = lName.Text;
+                                TextBox tb = (TextBox)temp.Controls[1];
+                                string value = tb.Text;
+                                singleFields[i].name = name + ": ";
+                                singleFields[i].value = value;
+                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                            }
                         }
-                        else
+                        //run through list of double fields
+                        //double type template
+                        for (int j = 1; j < battleCount + 1; j++)
                         {
-                            //normal cases
-                            Panel temp = (Panel)panel2.Controls[i];
-                            Label lName = (Label)temp.Controls[0];
-                            string name = lName.Text;
-                            TextBox tb = (TextBox)temp.Controls[1];
-                            string value = tb.Text;
-                            t.fieldList[i].name = name + ": ";
-                            t.fieldList[i].value = value;
+                            for (int i = singleFields.Count; i < doubleFields.Count + singleFields.Count; i++)
+                            {
+                                Field f = doubleFields[i-singleFields.Count];
+                                if (f.type == 3)
+                                {
+                                    //special case victory/defeat
+                                    Panel temp = (Panel)panel2.Controls[i];
+                                    Label lName = (Label)temp.Controls[0];
+                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    name = name + " " + j;
+                                    RadioButton vic = (RadioButton)temp.Controls[1];
+                                    bool b = vic.Checked;
+                                    if (b)
+                                    {
+                                        //was victory
+                                        doubleFields[i-singleFields.Count].value = "Win";
+                                    }
+                                    else
+                                    {
+                                        //was defeat
+                                        doubleFields[i-singleFields.Count].value = "Loss";
+                                    }
+                                    doubleFields[i-singleFields.Count].name = name + ": ";
+                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                }
+                                else if (f.type == 2)
+                                {
+                                    //special case date
+                                    Panel temp = (Panel)panel2.Controls[i];
+                                    Label lName = (Label)temp.Controls[0];
+                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    name = name + " " + j;
+                                    Label lValue = (Label)temp.Controls[1];
+                                    string value = lValue.Text;
+                                    doubleFields[i-singleFields.Count].name = name + ": ";
+                                    doubleFields[i-singleFields.Count].value = value;
+                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                }
+                                else if (f.type == 4)
+                                {
+                                    //special case youtube
+                                    Panel temp = (Panel)panel2.Controls[i];
+                                    Label lName = (Label)temp.Controls[0];
+                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    name = name + " " + j;
+                                    TextBox tb = (TextBox)temp.Controls[1];
+                                    string value = tb.Text;
+                                    doubleFields[i-singleFields.Count].name = name + ": \n";
+                                    doubleFields[i-singleFields.Count].value = "[youtube]" + value + "[/youtube]";
+                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                }
+                                else
+                                {
+                                    //normal cases
+                                    Panel temp = (Panel)panel2.Controls[i];
+                                    Label lName = (Label)temp.Controls[0];
+                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    name = name + " " + j;
+                                    TextBox tb = (TextBox)temp.Controls[1];
+                                    string value = tb.Text;
+                                    doubleFields[i-singleFields.Count].name = name + ": ";
+                                    doubleFields[i-singleFields.Count].value = value;
+                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                }
+                            }
                         }
                     }
                     //build the string
                     //first thread title
 
                     //then thread body
-                    for (int i = 0; i < t.fieldList.Count; i++)
+                    if (t.templateType == 1)
                     {
-                        bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                        //single
+                        for (int i = 0; i < t.fieldList.Count; i++)
+                        {
+                            bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                        }
+                    }
+                    else
+                    {
+                        //not single
+                        for (int i = 0; i < singleFields.Count; i++)
+                        {
+                            
+                        }
+                        for (int j = 1; j < battleCount + 1; j++)
+                        {
+                            for (int i = singleFields.Count; i < doubleFields.Count + singleFields.Count; i++)
+                            {
+                                
+                            }
+                        }
                     }
                     //add version information
                     bodySB.Append("Created using ReplayTemplate V_" + version);
@@ -723,7 +902,7 @@ namespace ReplayTemplate
         private void numBattlesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             int currentBattle = 1;
-            
+
             List<Field> tempList = new List<Field>();
             //copy all duplicate fields to second list
             for (int i = 0; i < displayTemplate.fieldList.Count; i++)
@@ -760,11 +939,11 @@ namespace ReplayTemplate
                 limit = limit * lastSelected;
                 for (int i = 0; i < limit; i++)
                 {
-                        //remove from gui
-                        panel2.Controls.RemoveAt(panel2.Controls.Count - 1);
+                    //remove from gui
+                    panel2.Controls.RemoveAt(panel2.Controls.Count - 1);
                 }
             }
-            
+
             //determine if landing or stronghold
             if (templateTypeTextBox.Text.Equals("stronghold"))
             {
@@ -791,7 +970,7 @@ namespace ReplayTemplate
                     }
                 }
                 //for each battle, for each item in the array, add it to the list
-                for (int i = currentBattle; i < battleCount+1; i++)
+                for (int i = currentBattle; i < battleCount + 1; i++)
                 {
                     for (int j = 0; j < tempList.Count; j++)
                     {
@@ -799,21 +978,25 @@ namespace ReplayTemplate
                         if (selection == 1)
                         {
                             //standard
+                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
                             this.addStandard(tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 2)
                         {
                             //date
+                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
                             this.addDate(tempList[j].name + " " + i);
                         }
                         else if (selection == 3)
                         {
                             //victoryDefeat
+                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
                             this.addVictoryDefeat(tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 4)
                         {
                             //youtube
+                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
                             this.addYoutube(tempList[j], tempList[j].name + " " + i);
                         }
                         else
@@ -827,6 +1010,12 @@ namespace ReplayTemplate
             }
             lastSelected = int.Parse(numBattlesComboBox.Text);
             lastTemplateComboBoxSelectedIndex = templateComboBox.SelectedIndex;
+        }
+
+        private string parseName(string name, int intendedLength)
+        {
+            string temp = name.Substring(0, intendedLength);
+            return temp;
         }
     }
 }
