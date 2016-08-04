@@ -53,7 +53,8 @@
             this.createThreadButton.Location = new System.Drawing.Point(256, 505);
             this.createThreadButton.Name = "createThreadButton";
             this.createThreadButton.Size = new System.Drawing.Size(110, 23);
-            this.createThreadButton.TabIndex = 0;
+            this.createThreadButton.TabIndex = 6;
+            this.createThreadButton.TabStop = false;
             this.createThreadButton.Text = "create replay thread";
             this.createThreadButton.UseVisualStyleBackColor = true;
             this.createThreadButton.Click += new System.EventHandler(this.createThreadButton_Click);
@@ -63,7 +64,8 @@
             this.resetUIButton.Location = new System.Drawing.Point(12, 505);
             this.resetUIButton.Name = "resetUIButton";
             this.resetUIButton.Size = new System.Drawing.Size(60, 23);
-            this.resetUIButton.TabIndex = 1;
+            this.resetUIButton.TabIndex = 3;
+            this.resetUIButton.TabStop = false;
             this.resetUIButton.Text = "reset";
             this.resetUIButton.UseVisualStyleBackColor = true;
             this.resetUIButton.Click += new System.EventHandler(this.resetUIButton_Click);
@@ -79,7 +81,7 @@
             this.templateComboBox.Location = new System.Drawing.Point(12, 25);
             this.templateComboBox.Name = "templateComboBox";
             this.templateComboBox.Size = new System.Drawing.Size(144, 21);
-            this.templateComboBox.TabIndex = 2;
+            this.templateComboBox.TabIndex = 0;
             this.templateComboBox.SelectedIndexChanged += new System.EventHandler(this.templateComboBox_SelectedIndexChanged);
             // 
             // label1
@@ -88,7 +90,7 @@
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 13);
-            this.label1.TabIndex = 3;
+            this.label1.TabIndex = 15;
             this.label1.Text = "Template";
             // 
             // panel2
@@ -98,7 +100,7 @@
             this.panel2.Location = new System.Drawing.Point(12, 91);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(354, 408);
-            this.panel2.TabIndex = 7;
+            this.panel2.TabIndex = 2;
             this.panel2.TabStop = true;
             // 
             // selectionLabel
@@ -107,7 +109,7 @@
             this.selectionLabel.Location = new System.Drawing.Point(69, 9);
             this.selectionLabel.Name = "selectionLabel";
             this.selectionLabel.Size = new System.Drawing.Size(87, 13);
-            this.selectionLabel.TabIndex = 8;
+            this.selectionLabel.TabIndex = 16;
             this.selectionLabel.Text = "Nothing selected";
             // 
             // label2
@@ -116,7 +118,7 @@
             this.label2.Location = new System.Drawing.Point(57, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 13);
-            this.label2.TabIndex = 9;
+            this.label2.TabIndex = 12;
             this.label2.Text = "Youtube Embed style";
             // 
             // youtubeEmbedStartTextBox
@@ -125,7 +127,7 @@
             this.youtubeEmbedStartTextBox.Name = "youtubeEmbedStartTextBox";
             this.youtubeEmbedStartTextBox.ReadOnly = true;
             this.youtubeEmbedStartTextBox.Size = new System.Drawing.Size(68, 20);
-            this.youtubeEmbedStartTextBox.TabIndex = 10;
+            this.youtubeEmbedStartTextBox.TabIndex = 8;
             this.youtubeEmbedStartTextBox.TabStop = false;
             this.youtubeEmbedStartTextBox.Text = "null";
             // 
@@ -135,7 +137,7 @@
             this.youtubeEmbedEndTextBox.Name = "youtubeEmbedEndTextBox";
             this.youtubeEmbedEndTextBox.ReadOnly = true;
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
-            this.youtubeEmbedEndTextBox.TabIndex = 11;
+            this.youtubeEmbedEndTextBox.TabIndex = 9;
             this.youtubeEmbedEndTextBox.TabStop = false;
             this.youtubeEmbedEndTextBox.Text = "null";
             // 
@@ -144,7 +146,8 @@
             this.saveTemplateButton.Location = new System.Drawing.Point(78, 505);
             this.saveTemplateButton.Name = "saveTemplateButton";
             this.saveTemplateButton.Size = new System.Drawing.Size(83, 23);
-            this.saveTemplateButton.TabIndex = 12;
+            this.saveTemplateButton.TabIndex = 4;
+            this.saveTemplateButton.TabStop = false;
             this.saveTemplateButton.Text = "save template";
             this.saveTemplateButton.UseVisualStyleBackColor = true;
             this.saveTemplateButton.Click += new System.EventHandler(this.saveTemplateButton_Click);
@@ -154,7 +157,8 @@
             this.loadTemplatesButton.Location = new System.Drawing.Point(167, 505);
             this.loadTemplatesButton.Name = "loadTemplatesButton";
             this.loadTemplatesButton.Size = new System.Drawing.Size(83, 23);
-            this.loadTemplatesButton.TabIndex = 13;
+            this.loadTemplatesButton.TabIndex = 5;
+            this.loadTemplatesButton.TabStop = false;
             this.loadTemplatesButton.Text = "load templates";
             this.loadTemplatesButton.UseVisualStyleBackColor = true;
             this.loadTemplatesButton.Click += new System.EventHandler(this.loadTemplatesButton_Click);
@@ -165,7 +169,7 @@
             this.label3.Location = new System.Drawing.Point(10, 49);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 13);
-            this.label3.TabIndex = 14;
+            this.label3.TabIndex = 11;
             this.label3.Text = "# fields";
             // 
             // numFieldsTextBox
@@ -174,7 +178,7 @@
             this.numFieldsTextBox.Name = "numFieldsTextBox";
             this.numFieldsTextBox.ReadOnly = true;
             this.numFieldsTextBox.Size = new System.Drawing.Size(23, 20);
-            this.numFieldsTextBox.TabIndex = 0;
+            this.numFieldsTextBox.TabIndex = 7;
             this.numFieldsTextBox.TabStop = false;
             this.numFieldsTextBox.Text = "null";
             // 
@@ -184,7 +188,7 @@
             this.label4.Location = new System.Drawing.Point(204, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 13);
-            this.label4.TabIndex = 16;
+            this.label4.TabIndex = 13;
             this.label4.Text = "type";
             // 
             // templateTypeTextBox
@@ -193,7 +197,7 @@
             this.templateTypeTextBox.Name = "templateTypeTextBox";
             this.templateTypeTextBox.ReadOnly = true;
             this.templateTypeTextBox.Size = new System.Drawing.Size(73, 20);
-            this.templateTypeTextBox.TabIndex = 17;
+            this.templateTypeTextBox.TabIndex = 10;
             this.templateTypeTextBox.TabStop = false;
             this.templateTypeTextBox.Text = "null";
             // 
@@ -203,7 +207,7 @@
             this.label5.Location = new System.Drawing.Point(298, 49);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(48, 13);
-            this.label5.TabIndex = 18;
+            this.label5.TabIndex = 14;
             this.label5.Text = "# battles";
             // 
             // numBattlesComboBox
@@ -220,7 +224,7 @@
             this.numBattlesComboBox.Location = new System.Drawing.Point(301, 65);
             this.numBattlesComboBox.Name = "numBattlesComboBox";
             this.numBattlesComboBox.Size = new System.Drawing.Size(34, 21);
-            this.numBattlesComboBox.TabIndex = 19;
+            this.numBattlesComboBox.TabIndex = 1;
             this.numBattlesComboBox.SelectedIndexChanged += new System.EventHandler(this.numBattlesComboBox_SelectedIndexChanged);
             // 
             // MainWindow
@@ -248,7 +252,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainWindow";
-            this.Text = "Main Window";
+            this.Text = "99";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

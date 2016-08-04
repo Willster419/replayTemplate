@@ -35,6 +35,8 @@ namespace ReplayTemplate
         private static int LABEL_HEIGHT = 13;
         private static int TEXTBOX_SIZE_WIDTH = 300;
         private static int TEXTBOX_SIZE_HEIGHT = 20;
+        private static int TAB_START = 17;
+        private int tabInc = 0;
         private StringBuilder titleSB = new StringBuilder();
         private StringBuilder bodySB = new StringBuilder();
         private Template rel2 = new Template();
@@ -79,6 +81,8 @@ namespace ReplayTemplate
             debug = true;
             if (debug) tempPath = tempPath2;
             templateFile = tempPath + "\\templateLists.xml";
+            panel2.GotFocus += new EventHandler(panel2_Focused);
+            createThreadButton.LostFocus += new EventHandler(createThreadButton_Unfocused);
         }
 
         private void checkForUpdates()
@@ -142,6 +146,7 @@ namespace ReplayTemplate
             //setup the panel
             Panel p = new Panel();
             p.TabStop = true;
+            p.TabIndex = TAB_START + tabInc++;
             if (f.duplicate) p.BackColor = SystemColors.ControlDark;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
@@ -155,6 +160,7 @@ namespace ReplayTemplate
             //setup the label in the panel
             Label l = new Label();
             l.Text = name;
+            l.TabIndex = TAB_START + tabInc++;
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -162,6 +168,7 @@ namespace ReplayTemplate
             l.Size = labelSize;
             //setup the text box in the panel
             TextBox tb = new TextBox();
+            tb.TabIndex = TAB_START + tabInc++; ;
             Point tbLocation = new Point();
             tbLocation.X = DELIMITER;
             tbLocation.Y = TEXTBOX_LOCATION_Y;
@@ -175,11 +182,14 @@ namespace ReplayTemplate
 
         private void addVictoryDefeat(Field f, string name)
         {
-            victory = new RadioButton() { Text = "Win", TabStop = true, TabIndex = 2 };
-            defeat = new RadioButton() { Text = "Loss", TabStop = true, TabIndex = 1 };
+            victory = new RadioButton() { Text = "Win", TabStop = true, TabIndex = TAB_START + tabInc++ };
+            defeat = new RadioButton() { Text = "Loss", TabStop = true, TabIndex = TAB_START + tabInc++ };
+            victory.GotFocus += new EventHandler(Victory_Focused);
+            victory.LostFocus += new EventHandler(Victory_Unfocused);
             //setup the panel
             Panel p = new Panel();
             p.TabStop = true;
+            p.TabIndex = TAB_START + tabInc++;
             if (f.duplicate) p.BackColor = SystemColors.ControlDark;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
@@ -193,6 +203,7 @@ namespace ReplayTemplate
             //setup the label in the panel
             Label l = new Label();
             l.Text = name;
+            l.TabIndex = TAB_START + tabInc++;
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -219,6 +230,7 @@ namespace ReplayTemplate
             //setup the panel
             Panel p = new Panel();
             p.TabStop = true;
+            p.TabIndex = TAB_START + tabInc++;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
             Point panelLocation = new Point();
@@ -231,6 +243,7 @@ namespace ReplayTemplate
             //setup the label in the panel
             Label l = new Label();
             l.Text = name;
+            l.TabIndex = TAB_START + tabInc++;
             Point labelLocation = new Point();
             labelLocation.X = DELIMITER;
             labelLocation.Y = DELIMITER;
@@ -240,6 +253,7 @@ namespace ReplayTemplate
             date = DateTime.Now;
             Label dateLabel = new Label();
             Point dateLocation = new Point();
+            dateLabel.TabIndex = TAB_START + tabInc++;
             dateLocation.X = DELIMITER;
             dateLocation.Y = TEXTBOX_LOCATION_Y;
             dateLabel.Location = dateLocation;
@@ -256,6 +270,7 @@ namespace ReplayTemplate
             //setup the panel
             Panel p = new Panel();
             p.TabStop = true;
+            p.TabIndex = TAB_START + tabInc++;
             if (f.duplicate) p.BackColor = SystemColors.ControlDark;
             p.Width = PANEL_WIDTH;
             p.Height = PANEL_HEIGHT;
@@ -289,6 +304,7 @@ namespace ReplayTemplate
 
         private void displaySelectedTemplate(int index)
         {
+            tabInc = 0;
             firstTimeLandingStronghold = true;
             displayTemplate = templateList[index];
             //infrom which is selected for verification
@@ -720,6 +736,7 @@ namespace ReplayTemplate
 
         private void resetUI()
         {
+            tabInc = 0;
             //clear display panel
             while (panel2.Controls.Count != 0)
             {
@@ -1016,6 +1033,34 @@ namespace ReplayTemplate
         {
             string temp = name.Substring(0, intendedLength);
             return temp;
+        }
+
+        private void Victory_Focused(Object sender, System.EventArgs e)
+        {
+            victory.TabStop = false;
+            defeat.TabStop = true;
+        }
+
+        private void Victory_Unfocused(Object sender, System.EventArgs e)
+        {
+            victory.TabStop = true;
+            defeat.TabStop = false;
+        }
+
+        private void panel2_Focused(Object sender, System.EventArgs e)
+        {
+            resetUIButton.TabStop = true;
+            saveTemplateButton.TabStop = true;
+            loadTemplatesButton.TabStop = true;
+            createThreadButton.TabStop = true;
+        }
+
+        private void createThreadButton_Unfocused(Object sender, System.EventArgs e)
+        {
+            resetUIButton.TabStop = false;
+            saveTemplateButton.TabStop = false;
+            loadTemplatesButton.TabStop = false;
+            createThreadButton.TabStop = false;
         }
     }
 }
