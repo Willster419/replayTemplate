@@ -101,7 +101,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(354, 408);
             this.panel2.TabIndex = 2;
-            this.panel2.TabStop = true;
             // 
             // selectionLabel
             // 

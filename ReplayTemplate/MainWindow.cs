@@ -81,7 +81,6 @@ namespace ReplayTemplate
             debug = true;
             if (debug) tempPath = tempPath2;
             templateFile = tempPath + "\\templateLists.xml";
-            panel2.GotFocus += new EventHandler(panel2_Focused);
             createThreadButton.LostFocus += new EventHandler(createThreadButton_Unfocused);
         }
 
@@ -168,6 +167,7 @@ namespace ReplayTemplate
             l.Size = labelSize;
             //setup the text box in the panel
             TextBox tb = new TextBox();
+            tb.GotFocus += new EventHandler(panel2_Focused);
             tb.TabIndex = TAB_START + tabInc++; ;
             Point tbLocation = new Point();
             tbLocation.X = DELIMITER;
