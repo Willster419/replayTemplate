@@ -19,24 +19,24 @@ namespace ReplayTemplate
     {
         /*
          * TODO:
-         * add sorting to template list (later)
+         * add sorting to template list rather than manuel xml sort(later)
          * create editor (later)
-         * start caching the history of previous entries (soon)
-         * put titles in as well(now)
+         * start caching the history of previous entries (soon) (may not need if getting from wot replay)
          * look at allowing expansion/resizable windows(soon)
          * parse WoT relpay (soon)
+         * optimize code (soon)
          * */
-        private string version = "Alpha 4";
+        private string version = "Beta 1";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
         private static int PANEL_HEIGHT = 45;
         private static int TEXTBOX_LOCATION_Y = 20;
-        private static int LABEL_WIDTH = 100;
+        private static int LABEL_WIDTH = 85;
         private static int LABEL_HEIGHT = 13;
         private static int TEXTBOX_SIZE_WIDTH = 300;
         private static int TEXTBOX_SIZE_HEIGHT = 20;
-        private static int CHECKBOX_WIDTH = 100;
+        private static int CHECKBOX_WIDTH = 75;
         private static int CHECKBOX_HEIGHT = 20;
         private static int TAB_START = 17;
         private int tabInc = 0;
@@ -50,6 +50,7 @@ namespace ReplayTemplate
         private Size labelSize = new Size(LABEL_WIDTH, LABEL_HEIGHT);
         private Size textBoxSize = new Size(TEXTBOX_SIZE_WIDTH, TEXTBOX_SIZE_HEIGHT);
         private Size checkBoxSize = new Size(CHECKBOX_WIDTH, CHECKBOX_HEIGHT);
+        private Size titleIndexSize = new Size(CHECKBOX_HEIGHT, CHECKBOX_HEIGHT);
         private RadioButton victory = new RadioButton() { Text = "Win" };
         private RadioButton defeat = new RadioButton() { Text = "Loss" };
         //private Panel FieldPanel = new Panel() { Width = PANEL_WIDTH, Height = PANEL_HEIGHT, BorderStyle = BorderStyle.FixedSingle };
@@ -82,7 +83,7 @@ namespace ReplayTemplate
             tempPath2 = Application.StartupPath;
             tempPath = Path.GetTempPath() + "\\ReplayTemplate";
             //uncomment the below string for debug mode
-            debug = true;
+            debug = false;
             if (debug) tempPath = tempPath2;
             templateFile = tempPath + "\\templateLists.xml";
             createThreadButton.LostFocus += new EventHandler(createThreadButton_Unfocused);
@@ -183,7 +184,7 @@ namespace ReplayTemplate
             titleCB.Enabled = false;
             titleCB.Checked = f.inTitle;
             titleCB.Text = "in header";
-            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point titleCBLocation = new Point(LABEL_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             titleCB.Location = titleCBLocation;
             titleCB.Size = checkBoxSize;
             //setup the body check box
@@ -191,14 +192,24 @@ namespace ReplayTemplate
             bodyCB.Enabled = false;
             bodyCB.Checked = f.inBody;
             bodyCB.Text = "in body";
-            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point bodyCBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             bodyCB.Location = bodyCBLocation;
             bodyCB.Size = checkBoxSize;
+            //setup the title index text box
+            TextBox titleIndexTB = new TextBox();
+            titleIndexTB.TabStop = false;
+            titleIndexTB.ReadOnly = true;
+            titleIndexTB.Text = "" + f.titleIndex;
+            if (f.titleIndex == 0) titleIndexTB.Visible = false;
+            Point titleIndexTBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleIndexTB.Location = titleIndexTBLocation;
+            titleIndexTB.Size = titleIndexSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(tb);
             p.Controls.Add(titleCB);
             p.Controls.Add(bodyCB);
+            p.Controls.Add(titleIndexTB);
             panel2.Controls.Add(p);
         }
 
@@ -245,7 +256,7 @@ namespace ReplayTemplate
             titleCB.Enabled = false;
             titleCB.Checked = f.inTitle;
             titleCB.Text = "in header";
-            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point titleCBLocation = new Point(LABEL_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             titleCB.Location = titleCBLocation;
             titleCB.Size = checkBoxSize;
             //setup the body check box
@@ -253,15 +264,25 @@ namespace ReplayTemplate
             bodyCB.Enabled = false;
             bodyCB.Checked = f.inBody;
             bodyCB.Text = "in body";
-            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point bodyCBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             bodyCB.Location = bodyCBLocation;
             bodyCB.Size = checkBoxSize;
+            //setup the title index text box
+            TextBox titleIndexTB = new TextBox();
+            titleIndexTB.TabStop = false;
+            titleIndexTB.ReadOnly = true;
+            titleIndexTB.Text = "" + f.titleIndex;
+            if (f.titleIndex == 0) titleIndexTB.Visible = false;
+            Point titleIndexTBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleIndexTB.Location = titleIndexTBLocation;
+            titleIndexTB.Size = titleIndexSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(victory);
             p.Controls.Add(defeat);
             p.Controls.Add(titleCB);
             p.Controls.Add(bodyCB);
+            p.Controls.Add(titleIndexTB);
             panel2.Controls.Add(p);
         }
 
@@ -304,7 +325,7 @@ namespace ReplayTemplate
             titleCB.Enabled = false;
             titleCB.Checked = f.inTitle;
             titleCB.Text = "in header";
-            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point titleCBLocation = new Point(LABEL_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             titleCB.Location = titleCBLocation;
             titleCB.Size = checkBoxSize;
             //setup the body check box
@@ -312,14 +333,24 @@ namespace ReplayTemplate
             bodyCB.Enabled = false;
             bodyCB.Checked = f.inBody;
             bodyCB.Text = "in body";
-            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point bodyCBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             bodyCB.Location = bodyCBLocation;
             bodyCB.Size = checkBoxSize;
+            //setup the title index text box
+            TextBox titleIndexTB = new TextBox();
+            titleIndexTB.TabStop = false;
+            titleIndexTB.ReadOnly = true;
+            titleIndexTB.Text = "" + f.titleIndex;
+            if (f.titleIndex == 0) titleIndexTB.Visible = false;
+            Point titleIndexTBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleIndexTB.Location = titleIndexTBLocation;
+            titleIndexTB.Size = titleIndexSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(dateLabel);
             p.Controls.Add(titleCB);
             p.Controls.Add(bodyCB);
+            p.Controls.Add(titleIndexTB);
             panel2.Controls.Add(p);
         }
 
@@ -359,7 +390,7 @@ namespace ReplayTemplate
             titleCB.Enabled = false;
             titleCB.Checked = f.inTitle;
             titleCB.Text = "in header";
-            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point titleCBLocation = new Point(LABEL_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             titleCB.Location = titleCBLocation;
             titleCB.Size = checkBoxSize;
             //setup the body check box
@@ -367,14 +398,24 @@ namespace ReplayTemplate
             bodyCB.Enabled = false;
             bodyCB.Checked = f.inBody;
             bodyCB.Text = "in body";
-            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            Point bodyCBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
             bodyCB.Location = bodyCBLocation;
             bodyCB.Size = checkBoxSize;
+            //setup the title index text box
+            TextBox titleIndexTB = new TextBox();
+            titleIndexTB.TabStop = false;
+            titleIndexTB.ReadOnly = true;
+            titleIndexTB.Text = "" + f.titleIndex;
+            if (f.titleIndex == 0) titleIndexTB.Visible = false;
+            Point titleIndexTBLocation = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleIndexTB.Location = titleIndexTBLocation;
+            titleIndexTB.Size = titleIndexSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(tb);
             p.Controls.Add(titleCB);
             p.Controls.Add(bodyCB);
+            p.Controls.Add(titleIndexTB);
             panel2.Controls.Add(p);
         }
 
@@ -529,6 +570,7 @@ namespace ReplayTemplate
                 bodySB = new StringBuilder();
                 titleSB = new StringBuilder();
                 textOut.body.Text = "";
+                Field[] headerList = new Field[99];
                 if (templateComboBox.Text.Equals("create custom..."))
                 {
 
@@ -567,7 +609,7 @@ namespace ReplayTemplate
                                 }
                                 t.fieldList[i].name = name + ": ";
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 2)
                             {
@@ -580,7 +622,7 @@ namespace ReplayTemplate
                                 t.fieldList[i].name = name + ": ";
                                 t.fieldList[i].value = value;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 4)
                             {
@@ -593,7 +635,7 @@ namespace ReplayTemplate
                                 t.fieldList[i].name = name + ": \n";
                                 t.fieldList[i].value = "[youtube]" + value + "[/youtube]";
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else
                             {
@@ -606,7 +648,7 @@ namespace ReplayTemplate
                                 t.fieldList[i].name = name + ": ";
                                 t.fieldList[i].value = value;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                         }
                     }
@@ -653,7 +695,7 @@ namespace ReplayTemplate
                                 }
                                 singleFields[i].name = name + ": ";
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 2)
                             {
@@ -666,7 +708,7 @@ namespace ReplayTemplate
                                 singleFields[i].name = name + ": ";
                                 singleFields[i].value = value;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 4)
                             {
@@ -679,7 +721,7 @@ namespace ReplayTemplate
                                 singleFields[i].name = name + ": \n";
                                 singleFields[i].value = "[youtube]" + value + "[/youtube]";
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else
                             {
@@ -692,7 +734,7 @@ namespace ReplayTemplate
                                 singleFields[i].name = name + ": ";
                                 singleFields[i].value = value;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                         }
                         //run through list of double fields
@@ -724,7 +766,7 @@ namespace ReplayTemplate
                                     }
                                     doubleFields[i-singleFields.Count].name = name + ": ";
                                     if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                    if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else if (f.type == 2)
                                 {
@@ -738,7 +780,7 @@ namespace ReplayTemplate
                                     doubleFields[i-singleFields.Count].name = name + ": ";
                                     doubleFields[i-singleFields.Count].value = value;
                                     if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                    if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else if (f.type == 4)
                                 {
@@ -752,7 +794,7 @@ namespace ReplayTemplate
                                     doubleFields[i-singleFields.Count].name = name + ": \n";
                                     doubleFields[i-singleFields.Count].value = "[youtube]" + value + "[/youtube]";
                                     if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                    if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else
                                 {
@@ -766,14 +808,36 @@ namespace ReplayTemplate
                                     doubleFields[i-singleFields.Count].name = name + ": ";
                                     doubleFields[i-singleFields.Count].value = value;
                                     if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
-                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
+                                    if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                             }
                         }
                     }
                     //build the string
                     //first thread title
-                    //LOL THIS NEVER HAPPENED
+                    int k = 0;
+                    while (headerList[k] != null)
+                    {
+                        if (headerList[k + 1] == null)
+                        {
+                            if (t.templateType == 1)
+                            {
+                                //last single header event, don't add space
+                                titleSB.Append(headerList[k].value);
+                            }
+                            else
+                            {
+                                //last sh or series header event, add type
+                                titleSB.Append(headerList[k].value + t.delimiter + t.templateType);
+                            }
+                            
+                        }
+                        else
+                        {
+                            titleSB.Append(headerList[k].value + t.delimiter);
+                        }
+                        k++;
+                    }
                     //then thread body
                     if (t.templateType == 1)
                     {
@@ -799,7 +863,7 @@ namespace ReplayTemplate
                         }
                     }
                     //add version information
-                    bodySB.Append("Created using ReplayTemplate V_" + version);
+                    bodySB.Append("\n\nCreated using ReplayTemplate V_" + version);
                     //output to window
                     textOut.title.Text = titleSB.ToString();
                     textOut.body.Text = bodySB.ToString();
@@ -876,6 +940,7 @@ namespace ReplayTemplate
             }
             else
             {
+                //this is old and needs to be updated
                 if (File.Exists(templateFile)) File.Delete(templateFile);
                 templateWriter = new XmlTextWriter(templateFile, Encoding.UTF8);
                 templateWriter.Formatting = Formatting.Indented;
@@ -985,6 +1050,9 @@ namespace ReplayTemplate
                                                             break;
                                                         case "inBody":
                                                             f.inBody = bool.Parse(templateReader.ReadString());
+                                                            break;
+                                                        case "titleIndex":
+                                                            f.titleIndex = int.Parse(templateReader.ReadString());
                                                             break;
                                                         //type HAS to be last thing read from each field node for this to work
                                                         case "type":
