@@ -46,6 +46,8 @@
             this.templateTypeTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.numBattlesComboBox = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.delimiterTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -114,7 +116,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(57, 49);
+            this.label2.Location = new System.Drawing.Point(57, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 13);
             this.label2.TabIndex = 12;
@@ -132,7 +134,7 @@
             // 
             // youtubeEmbedEndTextBox
             // 
-            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(134, 65);
+            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(134, 64);
             this.youtubeEmbedEndTextBox.Name = "youtubeEmbedEndTextBox";
             this.youtubeEmbedEndTextBox.ReadOnly = true;
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
@@ -142,6 +144,7 @@
             // 
             // saveTemplateButton
             // 
+            this.saveTemplateButton.Enabled = false;
             this.saveTemplateButton.Location = new System.Drawing.Point(78, 505);
             this.saveTemplateButton.Name = "saveTemplateButton";
             this.saveTemplateButton.Size = new System.Drawing.Size(83, 23);
@@ -153,6 +156,7 @@
             // 
             // loadTemplatesButton
             // 
+            this.loadTemplatesButton.Enabled = false;
             this.loadTemplatesButton.Location = new System.Drawing.Point(167, 505);
             this.loadTemplatesButton.Name = "loadTemplatesButton";
             this.loadTemplatesButton.Size = new System.Drawing.Size(83, 23);
@@ -176,7 +180,7 @@
             this.numFieldsTextBox.Location = new System.Drawing.Point(12, 65);
             this.numFieldsTextBox.Name = "numFieldsTextBox";
             this.numFieldsTextBox.ReadOnly = true;
-            this.numFieldsTextBox.Size = new System.Drawing.Size(23, 20);
+            this.numFieldsTextBox.Size = new System.Drawing.Size(34, 20);
             this.numFieldsTextBox.TabIndex = 7;
             this.numFieldsTextBox.TabStop = false;
             this.numFieldsTextBox.Text = "null";
@@ -184,7 +188,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(204, 49);
+            this.label4.Location = new System.Drawing.Point(202, 48);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 13);
             this.label4.TabIndex = 13;
@@ -192,7 +196,7 @@
             // 
             // templateTypeTextBox
             // 
-            this.templateTypeTextBox.Location = new System.Drawing.Point(207, 66);
+            this.templateTypeTextBox.Location = new System.Drawing.Point(205, 65);
             this.templateTypeTextBox.Name = "templateTypeTextBox";
             this.templateTypeTextBox.ReadOnly = true;
             this.templateTypeTextBox.Size = new System.Drawing.Size(73, 20);
@@ -203,7 +207,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(298, 49);
+            this.label5.Location = new System.Drawing.Point(281, 48);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(48, 13);
             this.label5.TabIndex = 14;
@@ -220,17 +224,36 @@
             "3",
             "4",
             "5"});
-            this.numBattlesComboBox.Location = new System.Drawing.Point(301, 65);
+            this.numBattlesComboBox.Location = new System.Drawing.Point(284, 64);
             this.numBattlesComboBox.Name = "numBattlesComboBox";
             this.numBattlesComboBox.Size = new System.Drawing.Size(34, 21);
             this.numBattlesComboBox.TabIndex = 1;
             this.numBattlesComboBox.SelectedIndexChanged += new System.EventHandler(this.numBattlesComboBox_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(331, 48);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(45, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "delimiter";
+            // 
+            // delimiterTextBox
+            // 
+            this.delimiterTextBox.Location = new System.Drawing.Point(334, 65);
+            this.delimiterTextBox.Name = "delimiterTextBox";
+            this.delimiterTextBox.ReadOnly = true;
+            this.delimiterTextBox.Size = new System.Drawing.Size(32, 20);
+            this.delimiterTextBox.TabIndex = 18;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 540);
+            this.Controls.Add(this.delimiterTextBox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.numBattlesComboBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.templateTypeTextBox);
@@ -251,7 +274,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainWindow";
-            this.Text = "99";
+            this.Text = "Main Window";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -278,6 +301,8 @@
         private System.Windows.Forms.TextBox templateTypeTextBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox numBattlesComboBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox delimiterTextBox;
     }
 }
 

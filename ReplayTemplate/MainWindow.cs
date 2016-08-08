@@ -23,11 +23,12 @@ namespace ReplayTemplate
          * create editor (later)
          * start caching the history of previous entries (soon)
          * put titles in as well(now)
-         * order tabs(now)
          * look at allowing expansion/resizable windows(soon)
+         * parse WoT relpay (soon)
          * */
-        private string version = "Alpha 3";
+        private string version = "Alpha 4";
         private static int DELIMITER = 3;
+        private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
         private static int PANEL_HEIGHT = 45;
         private static int TEXTBOX_LOCATION_Y = 20;
@@ -35,6 +36,8 @@ namespace ReplayTemplate
         private static int LABEL_HEIGHT = 13;
         private static int TEXTBOX_SIZE_WIDTH = 300;
         private static int TEXTBOX_SIZE_HEIGHT = 20;
+        private static int CHECKBOX_WIDTH = 100;
+        private static int CHECKBOX_HEIGHT = 20;
         private static int TAB_START = 17;
         private int tabInc = 0;
         private StringBuilder titleSB = new StringBuilder();
@@ -46,6 +49,7 @@ namespace ReplayTemplate
         //private Point p;
         private Size labelSize = new Size(LABEL_WIDTH, LABEL_HEIGHT);
         private Size textBoxSize = new Size(TEXTBOX_SIZE_WIDTH, TEXTBOX_SIZE_HEIGHT);
+        private Size checkBoxSize = new Size(CHECKBOX_WIDTH, CHECKBOX_HEIGHT);
         private RadioButton victory = new RadioButton() { Text = "Win" };
         private RadioButton defeat = new RadioButton() { Text = "Loss" };
         //private Panel FieldPanel = new Panel() { Width = PANEL_WIDTH, Height = PANEL_HEIGHT, BorderStyle = BorderStyle.FixedSingle };
@@ -174,9 +178,27 @@ namespace ReplayTemplate
             tbLocation.Y = TEXTBOX_LOCATION_Y;
             tb.Location = tbLocation;
             tb.Size = textBoxSize;
+            //setup the title check box
+            CheckBox titleCB = new CheckBox();
+            titleCB.Enabled = false;
+            titleCB.Checked = f.inTitle;
+            titleCB.Text = "in header";
+            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleCB.Location = titleCBLocation;
+            titleCB.Size = checkBoxSize;
+            //setup the body check box
+            CheckBox bodyCB = new CheckBox();
+            bodyCB.Enabled = false;
+            bodyCB.Checked = f.inBody;
+            bodyCB.Text = "in body";
+            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            bodyCB.Location = bodyCBLocation;
+            bodyCB.Size = checkBoxSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(tb);
+            p.Controls.Add(titleCB);
+            p.Controls.Add(bodyCB);
             panel2.Controls.Add(p);
         }
 
@@ -218,14 +240,32 @@ namespace ReplayTemplate
             defeatLocation.Y = TEXTBOX_LOCATION_Y;
             victory.Location = victoryLocation;
             defeat.Location = defeatLocation;
+            //setup the title check box
+            CheckBox titleCB = new CheckBox();
+            titleCB.Enabled = false;
+            titleCB.Checked = f.inTitle;
+            titleCB.Text = "in header";
+            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleCB.Location = titleCBLocation;
+            titleCB.Size = checkBoxSize;
+            //setup the body check box
+            CheckBox bodyCB = new CheckBox();
+            bodyCB.Enabled = false;
+            bodyCB.Checked = f.inBody;
+            bodyCB.Text = "in body";
+            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            bodyCB.Location = bodyCBLocation;
+            bodyCB.Size = checkBoxSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(victory);
             p.Controls.Add(defeat);
+            p.Controls.Add(titleCB);
+            p.Controls.Add(bodyCB);
             panel2.Controls.Add(p);
         }
 
-        private void addDate(string name)
+        private void addDate(Field f, string name)
         {
             //setup the panel
             Panel p = new Panel();
@@ -259,9 +299,27 @@ namespace ReplayTemplate
             dateLabel.Location = dateLocation;
             dateLabel.Size = textBoxSize;
             dateLabel.Text = String.Format("{0:MM/dd/yy}", date);
+            //setup the title check box
+            CheckBox titleCB = new CheckBox();
+            titleCB.Enabled = false;
+            titleCB.Checked = f.inTitle;
+            titleCB.Text = "in header";
+            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleCB.Location = titleCBLocation;
+            titleCB.Size = checkBoxSize;
+            //setup the body check box
+            CheckBox bodyCB = new CheckBox();
+            bodyCB.Enabled = false;
+            bodyCB.Checked = f.inBody;
+            bodyCB.Text = "in body";
+            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            bodyCB.Location = bodyCBLocation;
+            bodyCB.Size = checkBoxSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(dateLabel);
+            p.Controls.Add(titleCB);
+            p.Controls.Add(bodyCB);
             panel2.Controls.Add(p);
         }
 
@@ -296,9 +354,27 @@ namespace ReplayTemplate
             tbLocation.Y = TEXTBOX_LOCATION_Y;
             tb.Location = tbLocation;
             tb.Size = textBoxSize;
+            //setup the title check box
+            CheckBox titleCB = new CheckBox();
+            titleCB.Enabled = false;
+            titleCB.Checked = f.inTitle;
+            titleCB.Text = "in header";
+            Point titleCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            titleCB.Location = titleCBLocation;
+            titleCB.Size = checkBoxSize;
+            //setup the body check box
+            CheckBox bodyCB = new CheckBox();
+            bodyCB.Enabled = false;
+            bodyCB.Checked = f.inBody;
+            bodyCB.Text = "in body";
+            Point bodyCBLocation = new Point(CHECKBOX_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER);
+            bodyCB.Location = bodyCBLocation;
+            bodyCB.Size = checkBoxSize;
             //add the componets
             p.Controls.Add(l);
             p.Controls.Add(tb);
+            p.Controls.Add(titleCB);
+            p.Controls.Add(bodyCB);
             panel2.Controls.Add(p);
         }
 
@@ -314,6 +390,7 @@ namespace ReplayTemplate
             youtubeEmbedEndTextBox.Text = displayTemplate.youtubeEmbedEndURL;
             numFieldsTextBox.Text = "" + displayTemplate.numFields;
             templateTypeTextBox.Text = "" + displayTemplate.templateType;
+            delimiterTextBox.Text = displayTemplate.delimiter;
             //clear the current panel
             while (panel2.Controls.Count != 0)
             {
@@ -332,7 +409,7 @@ namespace ReplayTemplate
                 else if (selection == 2)
                 {
                     //date
-                    this.addDate(f.name);
+                    this.addDate(f, f.name);
                 }
                 else if (selection == 3)
                 {
@@ -450,6 +527,7 @@ namespace ReplayTemplate
             else
             {
                 bodySB = new StringBuilder();
+                titleSB = new StringBuilder();
                 textOut.body.Text = "";
                 if (templateComboBox.Text.Equals("create custom..."))
                 {
@@ -488,6 +566,8 @@ namespace ReplayTemplate
                                     t.fieldList[i].value = "Loss";
                                 }
                                 t.fieldList[i].name = name + ": ";
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                             else if (f.type == 2)
                             {
@@ -499,6 +579,8 @@ namespace ReplayTemplate
                                 string value = lValue.Text;
                                 t.fieldList[i].name = name + ": ";
                                 t.fieldList[i].value = value;
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                             else if (f.type == 4)
                             {
@@ -510,6 +592,8 @@ namespace ReplayTemplate
                                 string value = tb.Text;
                                 t.fieldList[i].name = name + ": \n";
                                 t.fieldList[i].value = "[youtube]" + value + "[/youtube]";
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                             else
                             {
@@ -521,6 +605,8 @@ namespace ReplayTemplate
                                 string value = tb.Text;
                                 t.fieldList[i].name = name + ": ";
                                 t.fieldList[i].value = value;
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                         }
                     }
@@ -566,7 +652,8 @@ namespace ReplayTemplate
                                     singleFields[i].value = "Loss";
                                 }
                                 singleFields[i].name = name + ": ";
-                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                             else if (f.type == 2)
                             {
@@ -578,7 +665,8 @@ namespace ReplayTemplate
                                 string value = lValue.Text;
                                 singleFields[i].name = name + ": ";
                                 singleFields[i].value = value;
-                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                             else if (f.type == 4)
                             {
@@ -590,7 +678,8 @@ namespace ReplayTemplate
                                 string value = tb.Text;
                                 singleFields[i].name = name + ": \n";
                                 singleFields[i].value = "[youtube]" + value + "[/youtube]";
-                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                             else
                             {
@@ -602,13 +691,15 @@ namespace ReplayTemplate
                                 string value = tb.Text;
                                 singleFields[i].name = name + ": ";
                                 singleFields[i].value = value;
-                                bodySB.Append(singleFields[i].name + singleFields[i].value + "\n");
+                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                             }
                         }
                         //run through list of double fields
                         //double type template
                         for (int j = 1; j < battleCount + 1; j++)
                         {
+                            bodySB.Append("\n\n");
                             for (int i = singleFields.Count; i < doubleFields.Count + singleFields.Count; i++)
                             {
                                 Field f = doubleFields[i-singleFields.Count];
@@ -632,7 +723,8 @@ namespace ReplayTemplate
                                         doubleFields[i-singleFields.Count].value = "Loss";
                                     }
                                     doubleFields[i-singleFields.Count].name = name + ": ";
-                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                                 }
                                 else if (f.type == 2)
                                 {
@@ -645,7 +737,8 @@ namespace ReplayTemplate
                                     string value = lValue.Text;
                                     doubleFields[i-singleFields.Count].name = name + ": ";
                                     doubleFields[i-singleFields.Count].value = value;
-                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                                 }
                                 else if (f.type == 4)
                                 {
@@ -658,7 +751,8 @@ namespace ReplayTemplate
                                     string value = tb.Text;
                                     doubleFields[i-singleFields.Count].name = name + ": \n";
                                     doubleFields[i-singleFields.Count].value = "[youtube]" + value + "[/youtube]";
-                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                                 }
                                 else
                                 {
@@ -671,21 +765,22 @@ namespace ReplayTemplate
                                     string value = tb.Text;
                                     doubleFields[i-singleFields.Count].name = name + ": ";
                                     doubleFields[i-singleFields.Count].value = value;
-                                    bodySB.Append(doubleFields[i - singleFields.Count].name + doubleFields[i - singleFields.Count].value + "\n");
+                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    if (f.inTitle) titleSB.Append(t.fieldList[i].value + t.delimiter);
                                 }
                             }
                         }
                     }
                     //build the string
                     //first thread title
-
+                    //LOL THIS NEVER HAPPENED
                     //then thread body
                     if (t.templateType == 1)
                     {
                         //single
                         for (int i = 0; i < t.fieldList.Count; i++)
                         {
-                            bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                            //bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
                         }
                     }
                     else
@@ -693,19 +788,20 @@ namespace ReplayTemplate
                         //not single
                         for (int i = 0; i < singleFields.Count; i++)
                         {
-                            
+                            //
                         }
                         for (int j = 1; j < battleCount + 1; j++)
                         {
                             for (int i = singleFields.Count; i < doubleFields.Count + singleFields.Count; i++)
                             {
-                                
+                                //
                             }
                         }
                     }
                     //add version information
                     bodySB.Append("Created using ReplayTemplate V_" + version);
                     //output to window
+                    textOut.title.Text = titleSB.ToString();
                     textOut.body.Text = bodySB.ToString();
                     textOut.passClanUrl(t.threadURL);
                     textOut.ShowDialog();
@@ -721,6 +817,9 @@ namespace ReplayTemplate
             t.threadURL = temp.threadURL;
             t.youtubeEmbedEndURL = temp.youtubeEmbedEndURL;
             t.youtubeEmbedStartURL = temp.youtubeEmbedStartURL;
+            t.delimiter = temp.delimiter;
+            t.numFields = temp.numFields;
+            t.templateType = temp.templateType;
             return t;
         }
 
@@ -759,6 +858,7 @@ namespace ReplayTemplate
             youtubeEmbedEndTextBox.Text = "null";
             numFieldsTextBox.Text = "null";
             templateTypeTextBox.Text = "null";
+            delimiterTextBox.Text = "null";
             //empty battle combo box selection
             while (numBattlesComboBox.Items.Count != 0)
             {
@@ -791,6 +891,7 @@ namespace ReplayTemplate
                     templateWriter.WriteElementString("youtubeEmbedEndURL", templateList[i].youtubeEmbedEndURL);
                     templateWriter.WriteElementString("numFields", "" + templateList[i].numFields);
                     templateWriter.WriteElementString("templateType", "" + templateList[i].templateType);
+                    templateWriter.WriteElementString("delimiter", templateList[i].delimiter);
                     templateWriter.WriteStartElement("fields");
                     for (int j = 0; j < templateList[i].fieldList.Count; j++)
                     {
@@ -799,6 +900,8 @@ namespace ReplayTemplate
                         templateWriter.WriteElementString("name", f.name);
                         templateWriter.WriteElementString("duplicate", "" + f.duplicate);
                         templateWriter.WriteElementString("type", "" + f.type);
+                        templateWriter.WriteElementString("inTitle", "" + f.inTitle);
+                        templateWriter.WriteElementString("inBody", "" + f.inBody);
                         templateWriter.WriteEndElement();
                     }
                     templateWriter.WriteEndElement();
@@ -851,6 +954,9 @@ namespace ReplayTemplate
                                 case "templateType":
                                     t.templateType = int.Parse(templateReader.ReadString());
                                     break;
+                                case "delimiter":
+                                    t.delimiter = templateReader.ReadString();
+                                    break;
                                 //fields HAS to be the last thing read from each template node for this to work
                                 case "fields":
                                     {
@@ -873,6 +979,12 @@ namespace ReplayTemplate
                                                             break;
                                                         case "duplicate":
                                                             f.duplicate = bool.Parse(templateReader.ReadString());
+                                                            break;
+                                                        case "inTitle":
+                                                            f.inTitle = bool.Parse(templateReader.ReadString());
+                                                            break;
+                                                        case "inBody":
+                                                            f.inBody = bool.Parse(templateReader.ReadString());
                                                             break;
                                                         //type HAS to be last thing read from each field node for this to work
                                                         case "type":
@@ -1002,7 +1114,7 @@ namespace ReplayTemplate
                         {
                             //date
                             tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
-                            this.addDate(tempList[j].name + " " + i);
+                            this.addDate(tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 3)
                         {

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.title = new System.Windows.Forms.TextBox();
             this.body = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -45,17 +45,19 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Copy and Paste the following text to thread title";
             // 
-            // textBox1
+            // title
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(243, 20);
-            this.textBox1.TabIndex = 1;
+            this.title.Location = new System.Drawing.Point(12, 25);
+            this.title.Name = "title";
+            this.title.ReadOnly = true;
+            this.title.Size = new System.Drawing.Size(243, 20);
+            this.title.TabIndex = 1;
             // 
             // body
             // 
             this.body.Location = new System.Drawing.Point(12, 82);
             this.body.Name = "body";
+            this.body.ReadOnly = true;
             this.body.Size = new System.Drawing.Size(243, 210);
             this.body.TabIndex = 2;
             this.body.Text = "";
@@ -98,7 +100,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.body);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.title);
             this.Controls.Add(this.label1);
             this.Name = "TextOutputWindow";
             this.Text = "TextOutputWindow";
@@ -113,7 +115,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.TextBox title;
         public System.Windows.Forms.RichTextBox body;
     }
 }

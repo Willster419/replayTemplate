@@ -13,6 +13,7 @@ namespace ReplayTemplate
         public string youtubeEmbedEndURL { get; set; }
         public int numFields { get; set; }
         public int templateType { get; set; }
+        public string delimiter { get; set; }
         //1=single, 2=landing, 3=stronghold
         public List<Field> fieldList;
         public Template()
