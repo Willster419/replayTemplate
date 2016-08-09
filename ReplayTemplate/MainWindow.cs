@@ -26,7 +26,7 @@ namespace ReplayTemplate
          * parse WoT relpay (soon)
          * optimize code (soon)
          * */
-        private string version = "Beta 1";
+        private string version = "Beta 2";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
@@ -53,6 +53,7 @@ namespace ReplayTemplate
         private Size titleIndexSize = new Size(CHECKBOX_HEIGHT, CHECKBOX_HEIGHT);
         private RadioButton victory = new RadioButton() { Text = "Win" };
         private RadioButton defeat = new RadioButton() { Text = "Loss" };
+        private RadioButton draw = new RadioButton();
         //private Panel FieldPanel = new Panel() { Width = PANEL_WIDTH, Height = PANEL_HEIGHT, BorderStyle = BorderStyle.FixedSingle };
         private EditFieldWindow edit = new EditFieldWindow();
         private TextOutputWindow textOut = new TextOutputWindow();
@@ -73,6 +74,7 @@ namespace ReplayTemplate
         int lastSelected = 0;
         int lastTemplateComboBoxSelectedIndex = -1;
         private List<int> origionalLengths = new List<int>();
+        private DateTimePicker dtp;
         public MainWindow()
         {
             InitializeComponent();
@@ -110,13 +112,14 @@ namespace ReplayTemplate
                     //download updateNotes.txt
                     client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/updateNotes.txt", tempPath + "\\updateNotes.txt");
                     //prompt user
-                    uw.updateNotesRTB.Text = "Version_" + newVersion + ":\n" + File.ReadAllText(tempPath + "\\updateNotes.txt");
+                    uw.updateNotesRTB.Text = File.ReadAllText(tempPath + "\\updateNotes.txt");
                     uw.updateAvailableLabel.Text = "An update is available: " + newVersion;
                     uw.ShowDialog();
                     if (uw.update)
                     {
                         //download new version
-                        client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/ReplayTemplate.exe", tempPath + "\\replayTemplate V_" + newVersion + ".exe");
+                        string temp = Path.GetFullPath(Application.StartupPath);
+                        client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/ReplayTemplate.exe", temp + "\\replayTemplate V_" + newVersion + ".exe");
                         //open new one
                         System.Diagnostics.Process.Start(tempPath + "\\replayTemplate V_" + newVersion + ".exe");
                         //close this one
@@ -216,9 +219,12 @@ namespace ReplayTemplate
         private void addVictoryDefeat(Field f, string name)
         {
             victory = new RadioButton() { Text = "Win", TabStop = true, TabIndex = TAB_START + tabInc++ };
-            defeat = new RadioButton() { Text = "Loss", TabStop = true, TabIndex = TAB_START + tabInc++ };
+            defeat = new RadioButton() { Text = "Loss (loss)", TabStop = true, TabIndex = TAB_START + tabInc++ };
+            draw = new RadioButton() { Text = "Loss (draw)", TabStop = true, TabIndex = TAB_START + tabInc++ };
             victory.GotFocus += new EventHandler(Victory_Focused);
             victory.LostFocus += new EventHandler(Victory_Unfocused);
+            defeat.GotFocus += new EventHandler(Defeat_Focused);
+            defeat.LostFocus += new EventHandler(Defeat_Unfocused);
             //setup the panel
             Panel p = new Panel();
             p.TabStop = true;
@@ -245,12 +251,16 @@ namespace ReplayTemplate
             //setup the radioButtons in the panel
             Point victoryLocation = new Point();
             Point defeatLocation = new Point();
+            Point drawLocation = new Point();
             victoryLocation.X = DELIMITER;
             victoryLocation.Y = TEXTBOX_LOCATION_Y;
             defeatLocation.X = DELIMITER + victory.Size.Width + DELIMITER;
             defeatLocation.Y = TEXTBOX_LOCATION_Y;
+            drawLocation.X = DELIMITER + victory.Size.Width + DELIMITER + defeat.Size.Width + DELIMITER;
+            drawLocation.Y = TEXTBOX_LOCATION_Y;
             victory.Location = victoryLocation;
             defeat.Location = defeatLocation;
+            draw.Location = drawLocation;
             //setup the title check box
             CheckBox titleCB = new CheckBox();
             titleCB.Enabled = false;
@@ -280,6 +290,7 @@ namespace ReplayTemplate
             p.Controls.Add(l);
             p.Controls.Add(victory);
             p.Controls.Add(defeat);
+            p.Controls.Add(draw);
             p.Controls.Add(titleCB);
             p.Controls.Add(bodyCB);
             p.Controls.Add(titleIndexTB);
@@ -311,7 +322,7 @@ namespace ReplayTemplate
             l.Location = labelLocation;
             l.Size = labelSize;
             //setup the text box in the panel
-            date = DateTime.Now;
+            /*date = DateTime.Now;
             Label dateLabel = new Label();
             Point dateLocation = new Point();
             dateLabel.TabIndex = TAB_START + tabInc++;
@@ -319,7 +330,20 @@ namespace ReplayTemplate
             dateLocation.Y = TEXTBOX_LOCATION_Y;
             dateLabel.Location = dateLocation;
             dateLabel.Size = textBoxSize;
-            dateLabel.Text = String.Format("{0:MM/dd/yy}", date);
+            dateLabel.Text = String.Format("{0:MM/dd/yy}", date);*/
+            //setup the dateTimePicker
+            dtp = new DateTimePicker();
+            dtp.Format = DateTimePickerFormat.Custom;
+            dtp.CustomFormat = "MM/dd/yy";
+            dtp.ShowUpDown = true;
+            date = DateTime.Now;
+            dtp.TabStop = true;
+            dtp.TabIndex = TAB_START + tabInc++;
+            Point dateLocation = new Point();
+            dateLocation.X = DELIMITER;
+            dateLocation.Y = TEXTBOX_LOCATION_Y;
+            dtp.Location = dateLocation;
+            dtp.Size = labelSize;
             //setup the title check box
             CheckBox titleCB = new CheckBox();
             titleCB.Enabled = false;
@@ -347,7 +371,7 @@ namespace ReplayTemplate
             titleIndexTB.Size = titleIndexSize;
             //add the componets
             p.Controls.Add(l);
-            p.Controls.Add(dateLabel);
+            p.Controls.Add(dtp);
             p.Controls.Add(titleCB);
             p.Controls.Add(bodyCB);
             p.Controls.Add(titleIndexTB);
@@ -596,16 +620,22 @@ namespace ReplayTemplate
                                 Label lName = (Label)temp.Controls[0];
                                 string name = lName.Text;
                                 RadioButton vic = (RadioButton)temp.Controls[1];
-                                bool b = vic.Checked;
-                                if (b)
+                                RadioButton def = (RadioButton)temp.Controls[2];
+                                RadioButton draw = (RadioButton)temp.Controls[3];
+                                if (vic.Checked)
                                 {
                                     //was victory
                                     t.fieldList[i].value = "Win";
                                 }
-                                else
+                                else if (def.Checked)
                                 {
                                     //was defeat
-                                    t.fieldList[i].value = "Loss";
+                                    t.fieldList[i].value = "Loss (loss)";
+                                }
+                                else
+                                {
+                                    //was draw
+                                    t.fieldList[i].value = "Loss (draw)";
                                 }
                                 t.fieldList[i].name = name + ": ";
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
@@ -617,7 +647,7 @@ namespace ReplayTemplate
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
                                 string name = lName.Text;
-                                Label lValue = (Label)temp.Controls[1];
+                                DateTimePicker lValue = (DateTimePicker)temp.Controls[1];
                                 string value = lValue.Text;
                                 t.fieldList[i].name = name + ": ";
                                 t.fieldList[i].value = value;
@@ -682,16 +712,22 @@ namespace ReplayTemplate
                                 Label lName = (Label)temp.Controls[0];
                                 string name = lName.Text;
                                 RadioButton vic = (RadioButton)temp.Controls[1];
-                                bool b = vic.Checked;
-                                if (b)
+                                RadioButton def = (RadioButton)temp.Controls[2];
+                                RadioButton draw = (RadioButton)temp.Controls[3];
+                                if (vic.Checked)
                                 {
                                     //was victory
                                     singleFields[i].value = "Win";
                                 }
-                                else
+                                else if (def.Checked)
                                 {
                                     //was defeat
-                                    singleFields[i].value = "Loss";
+                                    singleFields[i].value = "Loss (loss)";
+                                }
+                                else
+                                {
+                                    //was draw
+                                    singleFields[i].value = "Loss (draw)";
                                 }
                                 singleFields[i].name = name + ": ";
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
@@ -703,7 +739,7 @@ namespace ReplayTemplate
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
                                 string name = lName.Text;
-                                Label lValue = (Label)temp.Controls[1];
+                                DateTimePicker lValue = (DateTimePicker)temp.Controls[1];
                                 string value = lValue.Text;
                                 singleFields[i].name = name + ": ";
                                 singleFields[i].value = value;
@@ -739,33 +775,41 @@ namespace ReplayTemplate
                         }
                         //run through list of double fields
                         //double type template
+                        int anotherTemp = 0;
                         for (int j = 1; j < battleCount + 1; j++)
                         {
                             bodySB.Append("\n\n");
-                            for (int i = singleFields.Count; i < doubleFields.Count + singleFields.Count; i++)
+                            anotherTemp = singleFields.Count;
+                            for (int i = singleFields.Count + ((j - 1) * doubleFields.Count); i < doubleFields.Count + singleFields.Count + ((j - 1) * doubleFields.Count); i++)
                             {
-                                Field f = doubleFields[i-singleFields.Count];
+                                Field f = doubleFields[anotherTemp-singleFields.Count];
                                 if (f.type == 3)
                                 {
                                     //special case victory/defeat
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
                                     name = name + " " + j;
                                     RadioButton vic = (RadioButton)temp.Controls[1];
-                                    bool b = vic.Checked;
-                                    if (b)
+                                    RadioButton def = (RadioButton)temp.Controls[2];
+                                    RadioButton draw = (RadioButton)temp.Controls[3];
+                                    if (vic.Checked)
                                     {
                                         //was victory
-                                        doubleFields[i-singleFields.Count].value = "Win";
+                                        doubleFields[anotherTemp - singleFields.Count].value = "Win";
+                                    }
+                                    else if (def.Checked)
+                                    {
+                                        //was defeat
+                                        doubleFields[anotherTemp - singleFields.Count].value = "Loss (loss)";
                                     }
                                     else
                                     {
-                                        //was defeat
-                                        doubleFields[i-singleFields.Count].value = "Loss";
+                                        //was draw
+                                        doubleFields[anotherTemp - singleFields.Count].value = "Loss (draw)";
                                     }
-                                    doubleFields[i-singleFields.Count].name = name + ": ";
-                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": ";
+                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else if (f.type == 2)
@@ -773,13 +817,13 @@ namespace ReplayTemplate
                                     //special case date
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
                                     name = name + " " + j;
-                                    Label lValue = (Label)temp.Controls[1];
+                                    DateTimePicker lValue = (DateTimePicker)temp.Controls[1];
                                     string value = lValue.Text;
-                                    doubleFields[i-singleFields.Count].name = name + ": ";
-                                    doubleFields[i-singleFields.Count].value = value;
-                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": ";
+                                    doubleFields[anotherTemp-singleFields.Count].value = value;
+                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else if (f.type == 4)
@@ -787,13 +831,13 @@ namespace ReplayTemplate
                                     //special case youtube
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
                                     name = name + " " + j;
                                     TextBox tb = (TextBox)temp.Controls[1];
                                     string value = tb.Text;
-                                    doubleFields[i-singleFields.Count].name = name + ": \n";
-                                    doubleFields[i-singleFields.Count].value = "[youtube]" + value + "[/youtube]";
-                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": \n";
+                                    doubleFields[anotherTemp-singleFields.Count].value = "[youtube]" + value + "[/youtube]";
+                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else
@@ -801,15 +845,16 @@ namespace ReplayTemplate
                                     //normal cases
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[i - singleFields.Count].name, origionalLengths[i - singleFields.Count]);
+                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
                                     name = name + " " + j;
                                     TextBox tb = (TextBox)temp.Controls[1];
                                     string value = tb.Text;
-                                    doubleFields[i-singleFields.Count].name = name + ": ";
-                                    doubleFields[i-singleFields.Count].value = value;
-                                    if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": ";
+                                    doubleFields[anotherTemp-singleFields.Count].value = value;
+                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
+                                anotherTemp++;
                             }
                         }
                     }
@@ -1219,12 +1264,28 @@ namespace ReplayTemplate
         {
             victory.TabStop = false;
             defeat.TabStop = true;
+            draw.TabStop = true;
         }
 
         private void Victory_Unfocused(Object sender, System.EventArgs e)
         {
+            //victory.TabStop = true;
+            //defeat.TabStop = false;
+            //draw.TabStop = false;
+        }
+
+        private void Defeat_Focused(Object sender, System.EventArgs e)
+        {
+            victory.TabStop = false;
+            defeat.TabStop = false;
+            draw.TabStop = true;
+        }
+
+        private void Defeat_Unfocused(Object sender, System.EventArgs e)
+        {
             victory.TabStop = true;
             defeat.TabStop = false;
+            draw.TabStop = false;
         }
 
         private void panel2_Focused(Object sender, System.EventArgs e)

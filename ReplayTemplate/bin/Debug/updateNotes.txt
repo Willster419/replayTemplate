@@ -1,2 +1,6 @@
-Beta 1:
-First Release
+Beta 2:
+Added draw button that specifies loss type i.e. actual loss in battle or technical loss from draw (heldar) (obi)
+
+Date can now be set for other dates (obi)
+
+fixed bug with double fields i.e. opponent 1, using only opponent 1 for opponent fields 1, 2, 3, etc

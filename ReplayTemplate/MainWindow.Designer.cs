@@ -246,6 +246,7 @@
             this.delimiterTextBox.ReadOnly = true;
             this.delimiterTextBox.Size = new System.Drawing.Size(32, 20);
             this.delimiterTextBox.TabIndex = 18;
+            this.delimiterTextBox.TabStop = false;
             // 
             // MainWindow
             // 
