@@ -19,13 +19,11 @@ namespace ReplayTemplate
     {
         /*
          * TODO:
-         * add sorting to template list rather than manuel xml sort(later)
-         * create editor (later)
-         * start caching the history of previous entries (soon) (may not need if getting from wot replay)
-         * look at allowing expansion/resizable windows(soon)
-         * parse WoT relpay (soon)
-         * optimize code (soon)
-         * */
+         * add sorting to template list rather than manuel xml sort(soon)
+         * create editor (now)
+         * finish history cache (now)
+         * optimize code (later)
+         */
         private string version = "Beta 2";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
@@ -42,7 +40,6 @@ namespace ReplayTemplate
         private int tabInc = 0;
         private StringBuilder titleSB = new StringBuilder();
         private StringBuilder bodySB = new StringBuilder();
-        private Template rel2 = new Template();
         private List<Template> templateList = new List<Template>();
         private List<Template> tempTemplateList = new List<Template>();
         private DateTime date = new DateTime();
@@ -55,14 +52,14 @@ namespace ReplayTemplate
         private RadioButton defeat = new RadioButton() { Text = "Loss" };
         private RadioButton draw = new RadioButton();
         //private Panel FieldPanel = new Panel() { Width = PANEL_WIDTH, Height = PANEL_HEIGHT, BorderStyle = BorderStyle.FixedSingle };
-        private EditFieldWindow edit = new EditFieldWindow();
+        private TemplateEditerWindow edit = new TemplateEditerWindow();
         private TextOutputWindow textOut = new TextOutputWindow();
         private XmlTextWriter templateWriter;
         private XmlTextReader templateReader;
         string tempPath;
         string templateFile;
         string tempPath2;
-        private TemplateEditorWindow TEW = new TemplateEditorWindow();
+        string cachePath;
         private WebClient client = new WebClient();
         private UpdateWindow uw = new UpdateWindow();
         private PleaseWait pw = new PleaseWait("please wait");
@@ -75,6 +72,7 @@ namespace ReplayTemplate
         int lastTemplateComboBoxSelectedIndex = -1;
         private List<int> origionalLengths = new List<int>();
         private DateTimePicker dtp;
+        private string templateCachePath;
         public MainWindow()
         {
             InitializeComponent();
@@ -89,6 +87,7 @@ namespace ReplayTemplate
             if (debug) tempPath = tempPath2;
             templateFile = tempPath + "\\templateLists.xml";
             createThreadButton.LostFocus += new EventHandler(createThreadButton_Unfocused);
+            cachePath = tempPath + "\\cache";
         }
 
         private void checkForUpdates()
@@ -121,7 +120,7 @@ namespace ReplayTemplate
                         string temp = Path.GetFullPath(Application.StartupPath);
                         client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/ReplayTemplate.exe", temp + "\\replayTemplate V_" + newVersion + ".exe");
                         //open new one
-                        System.Diagnostics.Process.Start(tempPath + "\\replayTemplate V_" + newVersion + ".exe");
+                        System.Diagnostics.Process.Start(temp + "\\replayTemplate V_" + newVersion + ".exe");
                         //close this one
                         this.Close();
                     }
@@ -148,7 +147,7 @@ namespace ReplayTemplate
             }
         }
 
-        private void addStandard(Field f, string name)
+        private void addStandard(Template t, Field f, string name)
         {
             //setup the panel
             Panel p = new Panel();
@@ -182,6 +181,19 @@ namespace ReplayTemplate
             tbLocation.Y = TEXTBOX_LOCATION_Y;
             tb.Location = tbLocation;
             tb.Size = textBoxSize;
+            tb.AutoCompleteMode = AutoCompleteMode.Suggest;
+            tb.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            string[] entries = this.loadHistory(t.ToString(), f.name);
+            if (entries == null)
+            {
+
+            }
+            else
+            {
+                tb.AutoCompleteCustomSource = new AutoCompleteStringCollection();
+                foreach (string s in entries) tb.AutoCompleteCustomSource.Add(s);
+            }
+            //add custom sources here
             //setup the title check box
             CheckBox titleCB = new CheckBox();
             titleCB.Enabled = false;
@@ -321,16 +333,6 @@ namespace ReplayTemplate
             labelLocation.Y = DELIMITER;
             l.Location = labelLocation;
             l.Size = labelSize;
-            //setup the text box in the panel
-            /*date = DateTime.Now;
-            Label dateLabel = new Label();
-            Point dateLocation = new Point();
-            dateLabel.TabIndex = TAB_START + tabInc++;
-            dateLocation.X = DELIMITER;
-            dateLocation.Y = TEXTBOX_LOCATION_Y;
-            dateLabel.Location = dateLocation;
-            dateLabel.Size = textBoxSize;
-            dateLabel.Text = String.Format("{0:MM/dd/yy}", date);*/
             //setup the dateTimePicker
             dtp = new DateTimePicker();
             dtp.Format = DateTimePickerFormat.Custom;
@@ -469,7 +471,7 @@ namespace ReplayTemplate
                 if (selection == 1)
                 {
                     //standard
-                    this.addStandard(f, f.name);
+                    this.addStandard(displayTemplate, f, f.name);
                 }
                 else if (selection == 2)
                 {
@@ -510,7 +512,7 @@ namespace ReplayTemplate
             }
             if (displayTemplate.templateType == 2)
             {
-                templateTypeTextBox.Text = "landing";
+                templateTypeTextBox.Text = "series";
                 numBattlesComboBox.Items.Add("2");
                 numBattlesComboBox.Items.Add("3");
                 numBattlesComboBox.Items.Add("4");
@@ -527,9 +529,7 @@ namespace ReplayTemplate
                 numBattlesComboBox.SelectedIndex = 0;
                 numBattlesComboBox.Enabled = true;
             }
-
-            //match number battles
-            //use above to determine allowed range of battles
+            //create the history for the template if it does not already exist.
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -551,6 +551,7 @@ namespace ReplayTemplate
             Application.DoEvents();
             System.Threading.Thread.Sleep(100);
             this.loadTemplates();
+            this.Text = "ReplayTemplate version " + version;
             pw.Close();
         }
 
@@ -563,12 +564,13 @@ namespace ReplayTemplate
             else if (templateComboBox.Text.Equals("create/edit custom template..."))
             {
                 //launch editor
-                TEW.ShowDialog();
+                edit.ShowDialog();
                 this.resetUI();
             }
             else
             {
                 //load template
+                this.setupCache(templateList[templateComboBox.SelectedIndex]);
                 this.displaySelectedTemplate(templateComboBox.SelectedIndex);
             }
         }
@@ -679,6 +681,7 @@ namespace ReplayTemplate
                                 t.fieldList[i].value = value;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
+                                this.appendEntry(t.ToString(), name, value);
                             }
                         }
                     }
@@ -935,11 +938,6 @@ namespace ReplayTemplate
         private void saveTemplateButton_Click(object sender, EventArgs e)
         {
             this.saveTemplates();
-        }
-
-        private void loadTemplatesButton_Click(object sender, EventArgs e)
-        {
-            this.loadTemplates();
         }
 
         private void resetUI()
@@ -1221,7 +1219,7 @@ namespace ReplayTemplate
                         {
                             //standard
                             tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
-                            this.addStandard(tempList[j], tempList[j].name + " " + i);
+                            this.addStandard(displayTemplate, tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 2)
                         {
@@ -1292,16 +1290,85 @@ namespace ReplayTemplate
         {
             resetUIButton.TabStop = true;
             saveTemplateButton.TabStop = true;
-            loadTemplatesButton.TabStop = true;
             createThreadButton.TabStop = true;
+            clearHistoryButton.TabStop = true;
         }
 
         private void createThreadButton_Unfocused(Object sender, System.EventArgs e)
         {
             resetUIButton.TabStop = false;
             saveTemplateButton.TabStop = false;
-            loadTemplatesButton.TabStop = false;
             createThreadButton.TabStop = false;
+            clearHistoryButton.TabStop = false;
+        }
+
+        private void clearHistoryButton_Click(object sender, EventArgs e)
+        {
+            //create messagebox for are you sure
+            DialogResult result = MessageBox.Show("Are you sure you want to delete the cache of all clan data?", "Are you sure", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                if (Directory.Exists(cachePath)) Directory.Delete(cachePath, true);
+            }
+        }
+
+        private void setupCache(Template t)
+        {
+            //check for main folder
+            templateCachePath = cachePath + "\\" + t.ToString();
+            if (!Directory.Exists(templateCachePath)) Directory.CreateDirectory(templateCachePath);
+            //check for subfolders
+            foreach (Field f in t.fieldList)
+            {
+                if (f.type == 1)
+                {
+                    //is standard type, make history for it
+                    string[] realName = f.name.Split(':');
+                    if (realName.Length > 2)
+                    {
+                        //user used ':' in entry, abort saving
+                        return;
+                    }
+                    string fieldCachePath = templateCachePath + "\\" + realName[0];
+                    if (!Directory.Exists(fieldCachePath)) Directory.CreateDirectory(fieldCachePath);
+                    string historyPath = fieldCachePath + "\\history.txt";
+                    if (!File.Exists(historyPath)) File.WriteAllText(historyPath, "");
+                }
+            }
+        }
+
+        private void appendEntry(string clanName, string fieldName, string value)
+        {
+            string[] data3 = fieldName.Split(':');
+            if (data3.Length > 2)
+            {
+                //user used ':' in entry, abort saving
+                return;
+            }
+            string filename = cachePath + "\\" + clanName + "\\" + data3[0] + "\\history.txt";
+            string data = File.ReadAllText(filename, Encoding.UTF8);
+            string[] data2 = data.Split(':');
+            foreach (string s in data2)
+            {
+                //duplicate value
+                if (s.Equals(value)) return;
+            }
+            data = data + ":" + value;
+            File.Delete(filename);
+            File.WriteAllText(filename, data, Encoding.UTF8);
+        }
+
+        private string[] loadHistory(string clanName, string fieldName)
+        {
+            string[] data2 = fieldName.Split(':');
+            if (data2.Length > 2)
+            {
+                //user used ':' in entry, abort saving
+                return null;
+            }
+            string filename = cachePath + "\\" + clanName + "\\" + data2[0] + "\\history.txt";
+            string data = File.ReadAllText(filename, Encoding.UTF8);
+            return data.Split(':');
         }
     }
 }

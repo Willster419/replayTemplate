@@ -23,7 +23,7 @@ namespace ReplayTemplate
         public override string ToString()
         {
             if(templateType == 1) return "[" + clanName + "] - " + "single";
-            else if(templateType == 2) return "[" + clanName + "] - " + "landing";
+            else if(templateType == 2) return "[" + clanName + "] - " + "series";
             else if (templateType == 3) return "[" + clanName + "] - " + "stronghold";
             else return null;
         }

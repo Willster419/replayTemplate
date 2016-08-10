@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ReplayTemplate
 {
-    class Field
+    public class Field
     {
         public string name { get; set; }
         public int type { get; set; }
@@ -19,6 +19,10 @@ namespace ReplayTemplate
         {
             name = fieldName;
             type = fieldType;
+        }
+        public override string ToString()
+        {
+            return name;
         }
     }
 }

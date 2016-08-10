@@ -39,7 +39,6 @@
             this.youtubeEmbedStartTextBox = new System.Windows.Forms.TextBox();
             this.youtubeEmbedEndTextBox = new System.Windows.Forms.TextBox();
             this.saveTemplateButton = new System.Windows.Forms.Button();
-            this.loadTemplatesButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.numFieldsTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -48,6 +47,7 @@
             this.numBattlesComboBox = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.delimiterTextBox = new System.Windows.Forms.TextBox();
+            this.clearHistoryButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -101,7 +101,7 @@
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Location = new System.Drawing.Point(12, 91);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(354, 408);
+            this.panel2.Size = new System.Drawing.Size(350, 400);
             this.panel2.TabIndex = 2;
             // 
             // selectionLabel
@@ -153,18 +153,6 @@
             this.saveTemplateButton.Text = "save template";
             this.saveTemplateButton.UseVisualStyleBackColor = true;
             this.saveTemplateButton.Click += new System.EventHandler(this.saveTemplateButton_Click);
-            // 
-            // loadTemplatesButton
-            // 
-            this.loadTemplatesButton.Enabled = false;
-            this.loadTemplatesButton.Location = new System.Drawing.Point(167, 505);
-            this.loadTemplatesButton.Name = "loadTemplatesButton";
-            this.loadTemplatesButton.Size = new System.Drawing.Size(83, 23);
-            this.loadTemplatesButton.TabIndex = 5;
-            this.loadTemplatesButton.TabStop = false;
-            this.loadTemplatesButton.Text = "load templates";
-            this.loadTemplatesButton.UseVisualStyleBackColor = true;
-            this.loadTemplatesButton.Click += new System.EventHandler(this.loadTemplatesButton_Click);
             // 
             // label3
             // 
@@ -248,11 +236,23 @@
             this.delimiterTextBox.TabIndex = 18;
             this.delimiterTextBox.TabStop = false;
             // 
+            // clearHistoryButton
+            // 
+            this.clearHistoryButton.Location = new System.Drawing.Point(167, 505);
+            this.clearHistoryButton.Name = "clearHistoryButton";
+            this.clearHistoryButton.Size = new System.Drawing.Size(83, 23);
+            this.clearHistoryButton.TabIndex = 19;
+            this.clearHistoryButton.TabStop = false;
+            this.clearHistoryButton.Text = "clear history";
+            this.clearHistoryButton.UseVisualStyleBackColor = true;
+            this.clearHistoryButton.Click += new System.EventHandler(this.clearHistoryButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(378, 540);
+            this.ClientSize = new System.Drawing.Size(379, 536);
+            this.Controls.Add(this.clearHistoryButton);
             this.Controls.Add(this.delimiterTextBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.numBattlesComboBox);
@@ -261,7 +261,6 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numFieldsTextBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.loadTemplatesButton);
             this.Controls.Add(this.saveTemplateButton);
             this.Controls.Add(this.youtubeEmbedEndTextBox);
             this.Controls.Add(this.youtubeEmbedStartTextBox);
@@ -295,7 +294,6 @@
         private System.Windows.Forms.TextBox youtubeEmbedStartTextBox;
         private System.Windows.Forms.TextBox youtubeEmbedEndTextBox;
         private System.Windows.Forms.Button saveTemplateButton;
-        private System.Windows.Forms.Button loadTemplatesButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox numFieldsTextBox;
         private System.Windows.Forms.Label label4;
@@ -304,6 +302,7 @@
         private System.Windows.Forms.ComboBox numBattlesComboBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox delimiterTextBox;
+        private System.Windows.Forms.Button clearHistoryButton;
     }
 }
 
