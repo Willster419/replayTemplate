@@ -32,12 +32,9 @@
             this.selectFieldComboBox = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.indexLabel = new System.Windows.Forms.Label();
-            this.indexComboBox = new System.Windows.Forms.ComboBox();
-            this.removeButton = new System.Windows.Forms.Button();
             this.updateButton = new System.Windows.Forms.Button();
             this.fieldTypeLabel = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.fieldTypeComboBox = new System.Windows.Forms.ComboBox();
             this.fieldNameLabel = new System.Windows.Forms.Label();
             this.fieldnameTextBox = new System.Windows.Forms.TextBox();
             this.inHeaderCheckBox = new System.Windows.Forms.CheckBox();
@@ -45,6 +42,9 @@
             this.inBodyCheckBox = new System.Windows.Forms.CheckBox();
             this.positionComboBox = new System.Windows.Forms.ComboBox();
             this.previewLabel = new System.Windows.Forms.Label();
+            this.insertCheckBox = new System.Windows.Forms.CheckBox();
+            this.insertComboBox = new System.Windows.Forms.ComboBox();
+            this.isDuplicateCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // selectFieldLabel
@@ -64,6 +64,7 @@
             this.selectFieldComboBox.Name = "selectFieldComboBox";
             this.selectFieldComboBox.Size = new System.Drawing.Size(121, 21);
             this.selectFieldComboBox.TabIndex = 1;
+            this.selectFieldComboBox.SelectedIndexChanged += new System.EventHandler(this.selectFieldComboBox_SelectedIndexChanged);
             // 
             // panel1
             // 
@@ -83,41 +84,16 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // indexLabel
-            // 
-            this.indexLabel.AutoSize = true;
-            this.indexLabel.Location = new System.Drawing.Point(151, 9);
-            this.indexLabel.Name = "indexLabel";
-            this.indexLabel.Size = new System.Drawing.Size(71, 13);
-            this.indexLabel.TabIndex = 4;
-            this.indexLabel.Text = "index position";
-            // 
-            // indexComboBox
-            // 
-            this.indexComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.indexComboBox.FormattingEnabled = true;
-            this.indexComboBox.Location = new System.Drawing.Point(154, 25);
-            this.indexComboBox.Name = "indexComboBox";
-            this.indexComboBox.Size = new System.Drawing.Size(63, 21);
-            this.indexComboBox.TabIndex = 5;
-            // 
-            // removeButton
-            // 
-            this.removeButton.Location = new System.Drawing.Point(147, 198);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(75, 23);
-            this.removeButton.TabIndex = 6;
-            this.removeButton.Text = "remove";
-            this.removeButton.UseVisualStyleBackColor = true;
-            // 
             // updateButton
             // 
+            this.updateButton.Enabled = false;
             this.updateButton.Location = new System.Drawing.Point(278, 198);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(75, 23);
             this.updateButton.TabIndex = 7;
             this.updateButton.Text = "update";
             this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // fieldTypeLabel
             // 
@@ -128,24 +104,25 @@
             this.fieldTypeLabel.TabIndex = 8;
             this.fieldTypeLabel.Text = "field type";
             // 
-            // comboBox1
+            // fieldTypeComboBox
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.fieldTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.fieldTypeComboBox.FormattingEnabled = true;
+            this.fieldTypeComboBox.Items.AddRange(new object[] {
             "1 - standard",
             "2 - date",
             "3 - victoryDefeatDraw",
             "4 - youtube"});
-            this.comboBox1.Location = new System.Drawing.Point(23, 65);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 9;
+            this.fieldTypeComboBox.Location = new System.Drawing.Point(23, 65);
+            this.fieldTypeComboBox.Name = "fieldTypeComboBox";
+            this.fieldTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.fieldTypeComboBox.TabIndex = 9;
+            this.fieldTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.fieldTypeComboBox_SelectedIndexChanged);
             // 
             // fieldNameLabel
             // 
             this.fieldNameLabel.AutoSize = true;
-            this.fieldNameLabel.Location = new System.Drawing.Point(150, 49);
+            this.fieldNameLabel.Location = new System.Drawing.Point(185, 68);
             this.fieldNameLabel.Name = "fieldNameLabel";
             this.fieldNameLabel.Size = new System.Drawing.Size(55, 13);
             this.fieldNameLabel.TabIndex = 10;
@@ -153,10 +130,11 @@
             // 
             // fieldnameTextBox
             // 
-            this.fieldnameTextBox.Location = new System.Drawing.Point(153, 66);
+            this.fieldnameTextBox.Location = new System.Drawing.Point(246, 65);
             this.fieldnameTextBox.Name = "fieldnameTextBox";
             this.fieldnameTextBox.Size = new System.Drawing.Size(100, 20);
             this.fieldnameTextBox.TabIndex = 11;
+            this.fieldnameTextBox.TextChanged += new System.EventHandler(this.fieldnameTextBox_TextChanged);
             // 
             // inHeaderCheckBox
             // 
@@ -167,6 +145,7 @@
             this.inHeaderCheckBox.TabIndex = 12;
             this.inHeaderCheckBox.Text = "inHeader";
             this.inHeaderCheckBox.UseVisualStyleBackColor = true;
+            this.inHeaderCheckBox.CheckedChanged += new System.EventHandler(this.inHeaderCheckBox_CheckedChanged);
             // 
             // positionLabel
             // 
@@ -186,10 +165,12 @@
             this.inBodyCheckBox.TabIndex = 14;
             this.inBodyCheckBox.Text = "inBody";
             this.inBodyCheckBox.UseVisualStyleBackColor = true;
+            this.inBodyCheckBox.CheckedChanged += new System.EventHandler(this.inBodyCheckBox_CheckedChanged);
             // 
             // positionComboBox
             // 
             this.positionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.positionComboBox.Enabled = false;
             this.positionComboBox.FormattingEnabled = true;
             this.positionComboBox.Location = new System.Drawing.Point(64, 109);
             this.positionComboBox.Name = "positionComboBox";
@@ -205,11 +186,45 @@
             this.previewLabel.TabIndex = 16;
             this.previewLabel.Text = "preview:";
             // 
+            // insertCheckBox
+            // 
+            this.insertCheckBox.AutoSize = true;
+            this.insertCheckBox.Location = new System.Drawing.Point(158, 115);
+            this.insertCheckBox.Name = "insertCheckBox";
+            this.insertCheckBox.Size = new System.Drawing.Size(84, 17);
+            this.insertCheckBox.TabIndex = 17;
+            this.insertCheckBox.Text = "insert above";
+            this.insertCheckBox.UseVisualStyleBackColor = true;
+            this.insertCheckBox.CheckedChanged += new System.EventHandler(this.moveCheckBox_CheckedChanged);
+            // 
+            // insertComboBox
+            // 
+            this.insertComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.insertComboBox.FormattingEnabled = true;
+            this.insertComboBox.Location = new System.Drawing.Point(246, 113);
+            this.insertComboBox.Name = "insertComboBox";
+            this.insertComboBox.Size = new System.Drawing.Size(121, 21);
+            this.insertComboBox.TabIndex = 18;
+            // 
+            // isDuplicateCheckBox
+            // 
+            this.isDuplicateCheckBox.AutoSize = true;
+            this.isDuplicateCheckBox.Location = new System.Drawing.Point(246, 92);
+            this.isDuplicateCheckBox.Name = "isDuplicateCheckBox";
+            this.isDuplicateCheckBox.Size = new System.Drawing.Size(78, 17);
+            this.isDuplicateCheckBox.TabIndex = 19;
+            this.isDuplicateCheckBox.Text = "isDuplicate";
+            this.isDuplicateCheckBox.UseVisualStyleBackColor = true;
+            this.isDuplicateCheckBox.CheckedChanged += new System.EventHandler(this.isDuplicateCheckBox_CheckedChanged);
+            // 
             // FieldEditer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 233);
+            this.Controls.Add(this.isDuplicateCheckBox);
+            this.Controls.Add(this.insertComboBox);
+            this.Controls.Add(this.insertCheckBox);
             this.Controls.Add(this.previewLabel);
             this.Controls.Add(this.positionComboBox);
             this.Controls.Add(this.inBodyCheckBox);
@@ -217,12 +232,9 @@
             this.Controls.Add(this.inHeaderCheckBox);
             this.Controls.Add(this.fieldnameTextBox);
             this.Controls.Add(this.fieldNameLabel);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.fieldTypeComboBox);
             this.Controls.Add(this.fieldTypeLabel);
             this.Controls.Add(this.updateButton);
-            this.Controls.Add(this.removeButton);
-            this.Controls.Add(this.indexComboBox);
-            this.Controls.Add(this.indexLabel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.selectFieldComboBox);
@@ -242,12 +254,9 @@
         private System.Windows.Forms.ComboBox selectFieldComboBox;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Label indexLabel;
-        private System.Windows.Forms.ComboBox indexComboBox;
-        private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Button updateButton;
         private System.Windows.Forms.Label fieldTypeLabel;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox fieldTypeComboBox;
         private System.Windows.Forms.Label fieldNameLabel;
         private System.Windows.Forms.TextBox fieldnameTextBox;
         private System.Windows.Forms.CheckBox inHeaderCheckBox;
@@ -255,5 +264,8 @@
         private System.Windows.Forms.CheckBox inBodyCheckBox;
         private System.Windows.Forms.ComboBox positionComboBox;
         private System.Windows.Forms.Label previewLabel;
+        private System.Windows.Forms.CheckBox insertCheckBox;
+        private System.Windows.Forms.ComboBox insertComboBox;
+        private System.Windows.Forms.CheckBox isDuplicateCheckBox;
     }
 }

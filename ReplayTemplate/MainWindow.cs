@@ -21,7 +21,9 @@ namespace ReplayTemplate
          * TODO:
          * add sorting to template list rather than manuel xml sort(soon)
          * create editor (now)
-         * finish history cache (now)
+         * editor. add header logic
+         * editor. add save logic
+         * editr. add loading logic
          * optimize code (later)
          */
         private string version = "Beta 2";
@@ -774,6 +776,7 @@ namespace ReplayTemplate
                                 singleFields[i].value = value;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
+                                this.appendEntry(t.ToString(), name, value);
                             }
                         }
                         //run through list of double fields
@@ -849,6 +852,7 @@ namespace ReplayTemplate
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
                                     string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
+                                    string tempp = name;
                                     name = name + " " + j;
                                     TextBox tb = (TextBox)temp.Controls[1];
                                     string value = tb.Text;
@@ -856,6 +860,7 @@ namespace ReplayTemplate
                                     doubleFields[anotherTemp-singleFields.Count].value = value;
                                     if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
+                                    this.appendEntry(t.ToString(), tempp, value);
                                 }
                                 anotherTemp++;
                             }

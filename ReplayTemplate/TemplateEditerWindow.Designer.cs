@@ -33,7 +33,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.numBattlesComboBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.templateTypeTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.numFieldsTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,10 +40,8 @@
             this.youtubeEmbedEndTextBox = new System.Windows.Forms.TextBox();
             this.youtubeEmbedStartTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.selectionLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.templateComboBox = new System.Windows.Forms.ComboBox();
             this.resetUIButton = new System.Windows.Forms.Button();
             this.createThreadButton = new System.Windows.Forms.Button();
             this.selectTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -56,8 +53,6 @@
             this.saveTemplateDialog = new System.Windows.Forms.SaveFileDialog();
             this.clanNamelabel = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.headerLabel = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // clearHistoryButton
@@ -114,16 +109,6 @@
             this.label5.TabIndex = 33;
             this.label5.Text = "# battles";
             // 
-            // templateTypeTextBox
-            // 
-            this.templateTypeTextBox.Location = new System.Drawing.Point(205, 26);
-            this.templateTypeTextBox.Name = "templateTypeTextBox";
-            this.templateTypeTextBox.ReadOnly = true;
-            this.templateTypeTextBox.Size = new System.Drawing.Size(73, 20);
-            this.templateTypeTextBox.TabIndex = 29;
-            this.templateTypeTextBox.TabStop = false;
-            this.templateTypeTextBox.Text = "null";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -164,7 +149,7 @@
             // 
             // youtubeEmbedEndTextBox
             // 
-            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(134, 64);
+            this.youtubeEmbedEndTextBox.Location = new System.Drawing.Point(134, 65);
             this.youtubeEmbedEndTextBox.Name = "youtubeEmbedEndTextBox";
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
             this.youtubeEmbedEndTextBox.TabIndex = 28;
@@ -189,22 +174,13 @@
             this.label2.TabIndex = 31;
             this.label2.Text = "Youtube Embed style";
             // 
-            // selectionLabel
-            // 
-            this.selectionLabel.AutoSize = true;
-            this.selectionLabel.Location = new System.Drawing.Point(69, 9);
-            this.selectionLabel.Name = "selectionLabel";
-            this.selectionLabel.Size = new System.Drawing.Size(87, 13);
-            this.selectionLabel.TabIndex = 35;
-            this.selectionLabel.Text = "Nothing selected";
-            // 
             // panel2
             // 
             this.panel2.AutoScroll = true;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Location = new System.Drawing.Point(12, 116);
+            this.panel2.Location = new System.Drawing.Point(12, 91);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(354, 358);
+            this.panel2.Size = new System.Drawing.Size(354, 383);
             this.panel2.TabIndex = 22;
             // 
             // label1
@@ -216,16 +192,6 @@
             this.label1.TabIndex = 34;
             this.label1.Text = "Template";
             // 
-            // templateComboBox
-            // 
-            this.templateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.templateComboBox.Enabled = false;
-            this.templateComboBox.FormattingEnabled = true;
-            this.templateComboBox.Location = new System.Drawing.Point(12, 25);
-            this.templateComboBox.Name = "templateComboBox";
-            this.templateComboBox.Size = new System.Drawing.Size(144, 21);
-            this.templateComboBox.TabIndex = 20;
-            // 
             // resetUIButton
             // 
             this.resetUIButton.Location = new System.Drawing.Point(12, 505);
@@ -235,6 +201,7 @@
             this.resetUIButton.TabStop = false;
             this.resetUIButton.Text = "reset";
             this.resetUIButton.UseVisualStyleBackColor = true;
+            this.resetUIButton.Click += new System.EventHandler(this.resetUIButton_Click);
             // 
             // createThreadButton
             // 
@@ -254,10 +221,11 @@
             "single",
             "series",
             "stronghold"});
-            this.selectTypeComboBox.Location = new System.Drawing.Point(205, 63);
+            this.selectTypeComboBox.Location = new System.Drawing.Point(205, 64);
             this.selectTypeComboBox.Name = "selectTypeComboBox";
             this.selectTypeComboBox.Size = new System.Drawing.Size(73, 21);
             this.selectTypeComboBox.TabIndex = 39;
+            this.selectTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.selectTypeComboBox_SelectedIndexChanged);
             // 
             // editFieldButton
             // 
@@ -275,7 +243,7 @@
             this.addFieldButton.Name = "addFieldButton";
             this.addFieldButton.Size = new System.Drawing.Size(75, 23);
             this.addFieldButton.TabIndex = 41;
-            this.addFieldButton.Text = "Add Field...";
+            this.addFieldButton.Text = "add field...";
             this.addFieldButton.UseVisualStyleBackColor = true;
             this.addFieldButton.Click += new System.EventHandler(this.addButton_Click);
             // 
@@ -318,30 +286,11 @@
             this.textBox1.Size = new System.Drawing.Size(64, 20);
             this.textBox1.TabIndex = 45;
             // 
-            // headerLabel
-            // 
-            this.headerLabel.AutoSize = true;
-            this.headerLabel.Location = new System.Drawing.Point(10, 93);
-            this.headerLabel.Name = "headerLabel";
-            this.headerLabel.Size = new System.Drawing.Size(43, 13);
-            this.headerLabel.TabIndex = 46;
-            this.headerLabel.Text = "header:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(56, 90);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(310, 20);
-            this.textBox2.TabIndex = 47;
-            // 
             // TemplateEditerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 536);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.headerLabel);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.clanNamelabel);
             this.Controls.Add(this.loadTemplateButton);
@@ -354,7 +303,6 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.numBattlesComboBox);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.templateTypeTextBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numFieldsTextBox);
             this.Controls.Add(this.label3);
@@ -362,10 +310,8 @@
             this.Controls.Add(this.youtubeEmbedEndTextBox);
             this.Controls.Add(this.youtubeEmbedStartTextBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.selectionLabel);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.templateComboBox);
             this.Controls.Add(this.resetUIButton);
             this.Controls.Add(this.createThreadButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -384,7 +330,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox numBattlesComboBox;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox templateTypeTextBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox numFieldsTextBox;
         private System.Windows.Forms.Label label3;
@@ -392,10 +337,8 @@
         private System.Windows.Forms.TextBox youtubeEmbedEndTextBox;
         private System.Windows.Forms.TextBox youtubeEmbedStartTextBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label selectionLabel;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox templateComboBox;
         private System.Windows.Forms.Button resetUIButton;
         private System.Windows.Forms.Button createThreadButton;
         private System.Windows.Forms.ComboBox selectTypeComboBox;
@@ -407,7 +350,5 @@
         private System.Windows.Forms.SaveFileDialog saveTemplateDialog;
         private System.Windows.Forms.Label clanNamelabel;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label headerLabel;
-        private System.Windows.Forms.TextBox textBox2;
     }
 }
