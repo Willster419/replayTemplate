@@ -75,6 +75,7 @@ namespace ReplayTemplate
         private List<int> origionalLengths = new List<int>();
         private DateTimePicker dtp;
         private string templateCachePath;
+        //Comparer<Template> defaultCompate = Comparer<Template>.Default;
         public MainWindow()
         {
             InitializeComponent();
@@ -85,11 +86,12 @@ namespace ReplayTemplate
             tempPath2 = Application.StartupPath;
             tempPath = Path.GetTempPath() + "\\ReplayTemplate";
             //uncomment the below string for debug mode
-            debug = false;
+            debug = true;
             if (debug) tempPath = tempPath2;
             templateFile = tempPath + "\\templateLists.xml";
             createThreadButton.LostFocus += new EventHandler(createThreadButton_Unfocused);
             cachePath = tempPath + "\\cache";
+
         }
 
         private void checkForUpdates()
@@ -1141,7 +1143,16 @@ namespace ReplayTemplate
                 }
             }
             templateReader.Close();
+            this.sortTemplates();
             this.resetUI();
+        }
+
+        private void sortTemplates()
+        {
+            List<Template> sortedTemplates = new List<Template>(templateList);
+            //sortedTemplates.Sort(0,sortedTemplates.Count,string.Compare((sortedTemplates[0].clanName),(sortedTemplates[0].clanName)));
+            //String.Compare(
+            //sortedTemplates.Sort(0,sortedTemplates.Count,
         }
 
         private void numBattlesComboBox_SelectedIndexChanged(object sender, EventArgs e)
