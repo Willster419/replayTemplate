@@ -19,11 +19,7 @@ namespace ReplayTemplate
     {
         /*
          * TODO:
-         * add sorting to template list rather than manuel xml sort(soon)
-         * create editor (now):
-         * editor. add sample thread create logic
-         * editor. add save logic
-         * editr. add loading logic
+         * add sorting to template list rather than manuel xml sort(now)
          * optimize code (later)
          */
         private string version = "Beta 2";
