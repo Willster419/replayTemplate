@@ -104,14 +104,6 @@ namespace ReplayTemplate
 
         private void inHeaderCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (inHeaderCheckBox.Checked)
-            {
-                positionComboBox.Enabled = true;
-            }
-            else
-            {
-                positionComboBox.Enabled = false;
-            }
             if (fieldTypeComboBox.SelectedIndex != -1 && !loading) updateUI();
         }
 
@@ -144,7 +136,7 @@ namespace ReplayTemplate
                     {
                         if (numHitz == 2)
                         {
-                            
+
                         }
                     }
                     else if (mode == 1)
@@ -167,6 +159,7 @@ namespace ReplayTemplate
                 MessageBox.Show("You need to select a place to move it to lol");
                 return;
             }
+
             //check for duplicates all on botom
             if (mode == 1 || mode == 2)// if adding or editing
             {
@@ -195,24 +188,24 @@ namespace ReplayTemplate
                 //now actually check for all duplicates on the bottom
                 bool firstAssignment = true;
                 bool lastChangedValue = false;
-                foreach (Field f in tempList)
+                foreach (Field fi in tempList)
                 {
                     if (firstAssignment)
                     {
-                        if (f.duplicate)
+                        if (fi.duplicate)
                         {
                             MessageBox.Show("First field can't be a duplicate.");
                             return;
                         }
-                        lastChangedValue = f.duplicate;
+                        lastChangedValue = fi.duplicate;
                         firstAssignment = false;
                     }
                     else
                     {
-                        if (f.duplicate != lastChangedValue)
+                        if (fi.duplicate != lastChangedValue)
                         {
                             numchanges++;
-                            lastChangedValue = f.duplicate;
+                            lastChangedValue = fi.duplicate;
                         }
                     }
                 }
@@ -221,6 +214,33 @@ namespace ReplayTemplate
                     MessageBox.Show("All duplicate fields must be on the bottom");
                     return;
                 }
+            }
+            //write logic for correct index number
+            if (f.inTitle && f.titleIndex == 0)
+            {
+                MessageBox.Show("Header index can't be 0");
+                return;
+            }
+            //write logic for not taken index number
+            int numHeaderFields = 0;
+            foreach (Field fi in fieldList)
+            {
+                if (fi.inTitle) numHeaderFields++;
+                if (fi.titleIndex == f.titleIndex && f.inTitle)
+                {
+                    MessageBox.Show("That header index is already taken");
+                    return;
+                }
+            }
+            if (f.titleIndex > numHeaderFields+1)
+            {
+                MessageBox.Show("Header index can't be greator than the total number of fields with headers");
+                return;
+            }
+            if (f.inTitle && f.duplicate)
+            {
+                MessageBox.Show("Duplicate item can't be a header item");
+                return;
             }
             //apply changes based on remove, update, or add
             if (mode == 1)
@@ -263,15 +283,28 @@ namespace ReplayTemplate
                 return;
             }
             panel1.Controls.Clear();
-            
-                //if adding a new field
-                f = new Field(fieldnameTextBox.Text, fieldTypeComboBox.SelectedIndex + 1);
-                f.inBody = inBodyCheckBox.Checked;
-                f.inTitle = inHeaderCheckBox.Checked;
-                f.titleIndex = 0;
-                f.value = "";
-                f.duplicate = isDuplicateCheckBox.Checked;
-            
+
+            //if adding a new field
+            f = new Field(fieldnameTextBox.Text, fieldTypeComboBox.SelectedIndex + 1);
+            f.inBody = inBodyCheckBox.Checked;
+            f.inTitle = inHeaderCheckBox.Checked;
+            f.titleIndex = 0;
+            f.value = "";
+            f.duplicate = isDuplicateCheckBox.Checked;
+            if (f.inTitle)
+            {
+                headerPositionTextBox.Enabled = true;
+                headerPositionTextBox.Visible = true;
+                int test;
+                if (int.TryParse(headerPositionTextBox.Text, out test)) f.titleIndex = int.Parse(headerPositionTextBox.Text);
+            }
+            else
+            {
+                headerPositionTextBox.Text = "";
+                headerPositionTextBox.Enabled = false;
+                headerPositionTextBox.Visible = false;
+            }
+
             if (f.duplicate)
             {
                 panel1.BackColor = SystemColors.ControlDark;
@@ -283,7 +316,7 @@ namespace ReplayTemplate
             setupTextBox();
             setupBodyCheckBox();
             setupHeaderCheckBox();
-            setupIndexBox();
+            if (f.inTitle) setupIndexBox();
             if (fieldTypeComboBox.SelectedIndex == 1)
             {
                 //date
@@ -418,9 +451,10 @@ namespace ReplayTemplate
             {
                 Text = "" + f.titleIndex,
                 Location = new Point(LABEL_WIDTH + DELIMITER + CHECKBOX_WIDTH + DELIMITER, CHECKBOX_DELIMITER),
-                Size = titleIndexSize
+                Size = titleIndexSize,
+                ReadOnly = true
             };
-            if (f.titleIndex == 0) titleIndexTB.Visible = false;
+
         }
 
         private void fieldnameTextBox_TextChanged(object sender, EventArgs e)
@@ -462,6 +496,11 @@ namespace ReplayTemplate
         }
 
         private void isDuplicateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (fieldTypeComboBox.SelectedIndex != -1 && !loading) updateUI();
+        }
+
+        private void headerPositionTextBox_TextChanged(object sender, EventArgs e)
         {
             if (fieldTypeComboBox.SelectedIndex != -1 && !loading) updateUI();
         }

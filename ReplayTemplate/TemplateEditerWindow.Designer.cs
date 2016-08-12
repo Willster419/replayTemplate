@@ -28,11 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.clearHistoryButton = new System.Windows.Forms.Button();
             this.delimiterTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.numBattlesComboBox = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.numFieldsTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -53,18 +50,9 @@
             this.saveTemplateDialog = new System.Windows.Forms.SaveFileDialog();
             this.clanNamelabel = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
-            // clearHistoryButton
-            // 
-            this.clearHistoryButton.Enabled = false;
-            this.clearHistoryButton.Location = new System.Drawing.Point(146, 505);
-            this.clearHistoryButton.Name = "clearHistoryButton";
-            this.clearHistoryButton.Size = new System.Drawing.Size(74, 23);
-            this.clearHistoryButton.TabIndex = 38;
-            this.clearHistoryButton.TabStop = false;
-            this.clearHistoryButton.Text = "clear history";
-            this.clearHistoryButton.UseVisualStyleBackColor = true;
             // 
             // delimiterTextBox
             // 
@@ -82,32 +70,6 @@
             this.label6.Size = new System.Drawing.Size(45, 13);
             this.label6.TabIndex = 36;
             this.label6.Text = "delimiter";
-            // 
-            // numBattlesComboBox
-            // 
-            this.numBattlesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.numBattlesComboBox.Enabled = false;
-            this.numBattlesComboBox.FormattingEnabled = true;
-            this.numBattlesComboBox.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"});
-            this.numBattlesComboBox.Location = new System.Drawing.Point(284, 64);
-            this.numBattlesComboBox.Name = "numBattlesComboBox";
-            this.numBattlesComboBox.Size = new System.Drawing.Size(34, 21);
-            this.numBattlesComboBox.TabIndex = 21;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(281, 48);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(48, 13);
-            this.label5.TabIndex = 33;
-            this.label5.Text = "# battles";
             // 
             // label4
             // 
@@ -146,6 +108,7 @@
             this.saveTemplateButton.TabStop = false;
             this.saveTemplateButton.Text = "save template";
             this.saveTemplateButton.UseVisualStyleBackColor = true;
+            this.saveTemplateButton.Click += new System.EventHandler(this.saveTemplateButton_Click);
             // 
             // youtubeEmbedEndTextBox
             // 
@@ -154,7 +117,6 @@
             this.youtubeEmbedEndTextBox.Size = new System.Drawing.Size(59, 20);
             this.youtubeEmbedEndTextBox.TabIndex = 28;
             this.youtubeEmbedEndTextBox.TabStop = false;
-            this.youtubeEmbedEndTextBox.Text = "end";
             // 
             // youtubeEmbedStartTextBox
             // 
@@ -163,7 +125,6 @@
             this.youtubeEmbedStartTextBox.Size = new System.Drawing.Size(68, 20);
             this.youtubeEmbedStartTextBox.TabIndex = 27;
             this.youtubeEmbedStartTextBox.TabStop = false;
-            this.youtubeEmbedStartTextBox.Text = "start";
             // 
             // label2
             // 
@@ -212,18 +173,19 @@
             this.createThreadButton.TabStop = false;
             this.createThreadButton.Text = "create sample thread";
             this.createThreadButton.UseVisualStyleBackColor = true;
+            this.createThreadButton.Click += new System.EventHandler(this.createThreadButton_Click);
             // 
             // selectTypeComboBox
             // 
             this.selectTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selectTypeComboBox.FormattingEnabled = true;
             this.selectTypeComboBox.Items.AddRange(new object[] {
-            "single",
-            "series",
-            "stronghold"});
+            "1- single",
+            "2 - series",
+            "3 - stronghold"});
             this.selectTypeComboBox.Location = new System.Drawing.Point(205, 64);
             this.selectTypeComboBox.Name = "selectTypeComboBox";
-            this.selectTypeComboBox.Size = new System.Drawing.Size(73, 21);
+            this.selectTypeComboBox.Size = new System.Drawing.Size(91, 21);
             this.selectTypeComboBox.TabIndex = 39;
             this.selectTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.selectTypeComboBox_SelectedIndexChanged);
             // 
@@ -265,10 +227,23 @@
             this.loadTemplateButton.TabIndex = 43;
             this.loadTemplateButton.Text = "load template";
             this.loadTemplateButton.UseVisualStyleBackColor = true;
+            this.loadTemplateButton.Click += new System.EventHandler(this.loadTemplateButton_Click);
             // 
             // loadTemplateDialog
             // 
             this.loadTemplateDialog.FileName = "openFileDialog1";
+            this.loadTemplateDialog.Filter = "xml files (*.xml)|*.xml";
+            this.loadTemplateDialog.RestoreDirectory = true;
+            this.loadTemplateDialog.Title = "Load Template";
+            this.loadTemplateDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.loadTemplateDialog_FileOk);
+            // 
+            // saveTemplateDialog
+            // 
+            this.saveTemplateDialog.DefaultExt = "xml";
+            this.saveTemplateDialog.Filter = "xml files (*.xml)|*.xml";
+            this.saveTemplateDialog.RestoreDirectory = true;
+            this.saveTemplateDialog.Title = "Save Template";
+            this.saveTemplateDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveTemplateDialog_FileOk);
             // 
             // clanNamelabel
             // 
@@ -282,15 +257,34 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(284, 24);
+            this.textBox1.MaxLength = 5;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(64, 20);
             this.textBox1.TabIndex = 45;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(162, 8);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 13);
+            this.label5.TabIndex = 46;
+            this.label5.Text = "form link URL";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(165, 23);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 47;
             // 
             // TemplateEditerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 536);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.clanNamelabel);
             this.Controls.Add(this.loadTemplateButton);
@@ -298,11 +292,8 @@
             this.Controls.Add(this.addFieldButton);
             this.Controls.Add(this.editFieldButton);
             this.Controls.Add(this.selectTypeComboBox);
-            this.Controls.Add(this.clearHistoryButton);
             this.Controls.Add(this.delimiterTextBox);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.numBattlesComboBox);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.numFieldsTextBox);
             this.Controls.Add(this.label3);
@@ -325,11 +316,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button clearHistoryButton;
         private System.Windows.Forms.TextBox delimiterTextBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox numBattlesComboBox;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox numFieldsTextBox;
         private System.Windows.Forms.Label label3;
@@ -350,5 +338,7 @@
         private System.Windows.Forms.SaveFileDialog saveTemplateDialog;
         private System.Windows.Forms.Label clanNamelabel;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }

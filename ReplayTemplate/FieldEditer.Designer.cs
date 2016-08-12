@@ -40,11 +40,11 @@
             this.inHeaderCheckBox = new System.Windows.Forms.CheckBox();
             this.positionLabel = new System.Windows.Forms.Label();
             this.inBodyCheckBox = new System.Windows.Forms.CheckBox();
-            this.positionComboBox = new System.Windows.Forms.ComboBox();
             this.previewLabel = new System.Windows.Forms.Label();
             this.insertCheckBox = new System.Windows.Forms.CheckBox();
             this.insertComboBox = new System.Windows.Forms.ComboBox();
             this.isDuplicateCheckBox = new System.Windows.Forms.CheckBox();
+            this.headerPositionTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // selectFieldLabel
@@ -167,16 +167,6 @@
             this.inBodyCheckBox.UseVisualStyleBackColor = true;
             this.inBodyCheckBox.CheckedChanged += new System.EventHandler(this.inBodyCheckBox_CheckedChanged);
             // 
-            // positionComboBox
-            // 
-            this.positionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.positionComboBox.Enabled = false;
-            this.positionComboBox.FormattingEnabled = true;
-            this.positionComboBox.Location = new System.Drawing.Point(64, 109);
-            this.positionComboBox.Name = "positionComboBox";
-            this.positionComboBox.Size = new System.Drawing.Size(51, 21);
-            this.positionComboBox.TabIndex = 15;
-            // 
             // previewLabel
             // 
             this.previewLabel.AutoSize = true;
@@ -217,16 +207,25 @@
             this.isDuplicateCheckBox.UseVisualStyleBackColor = true;
             this.isDuplicateCheckBox.CheckedChanged += new System.EventHandler(this.isDuplicateCheckBox_CheckedChanged);
             // 
+            // headerPositionTextBox
+            // 
+            this.headerPositionTextBox.Enabled = false;
+            this.headerPositionTextBox.Location = new System.Drawing.Point(69, 109);
+            this.headerPositionTextBox.Name = "headerPositionTextBox";
+            this.headerPositionTextBox.Size = new System.Drawing.Size(29, 20);
+            this.headerPositionTextBox.TabIndex = 20;
+            this.headerPositionTextBox.TextChanged += new System.EventHandler(this.headerPositionTextBox_TextChanged);
+            // 
             // FieldEditer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 233);
+            this.Controls.Add(this.headerPositionTextBox);
             this.Controls.Add(this.isDuplicateCheckBox);
             this.Controls.Add(this.insertComboBox);
             this.Controls.Add(this.insertCheckBox);
             this.Controls.Add(this.previewLabel);
-            this.Controls.Add(this.positionComboBox);
             this.Controls.Add(this.inBodyCheckBox);
             this.Controls.Add(this.positionLabel);
             this.Controls.Add(this.inHeaderCheckBox);
@@ -262,10 +261,10 @@
         private System.Windows.Forms.CheckBox inHeaderCheckBox;
         private System.Windows.Forms.Label positionLabel;
         private System.Windows.Forms.CheckBox inBodyCheckBox;
-        private System.Windows.Forms.ComboBox positionComboBox;
         private System.Windows.Forms.Label previewLabel;
         private System.Windows.Forms.CheckBox insertCheckBox;
         private System.Windows.Forms.ComboBox insertComboBox;
         private System.Windows.Forms.CheckBox isDuplicateCheckBox;
+        private System.Windows.Forms.TextBox headerPositionTextBox;
     }
 }
