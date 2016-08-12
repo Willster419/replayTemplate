@@ -19,10 +19,9 @@ namespace ReplayTemplate
     {
         /*
          * TODO:
-         * add sorting to template list rather than manuel xml sort(now)
-         * optimize code (later)
+         * optimize code (maybe lol)
          */
-        private string version = "Beta 2";
+        private string version = "Beta 3";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
@@ -82,7 +81,7 @@ namespace ReplayTemplate
             tempPath2 = Application.StartupPath;
             tempPath = Path.GetTempPath() + "\\ReplayTemplate";
             //uncomment the below string for debug mode
-            debug = true;
+            debug = false;
             if (debug) tempPath = tempPath2;
             templateFile = tempPath + "\\templateLists.xml";
             createThreadButton.LostFocus += new EventHandler(createThreadButton_Unfocused);
@@ -120,7 +119,14 @@ namespace ReplayTemplate
                         string temp = Path.GetFullPath(Application.StartupPath);
                         client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/ReplayTemplate.exe", temp + "\\replayTemplate V_" + newVersion + ".exe");
                         //open new one
-                        System.Diagnostics.Process.Start(temp + "\\replayTemplate V_" + newVersion + ".exe");
+                        try
+                        {
+                            System.Diagnostics.Process.Start(temp + "\\replayTemplate V_" + newVersion + ".exe");
+                        }
+                        catch (Win32Exception)
+                        {
+                            MessageBox.Show("Could not start the new version, but it is located in\n" + temp);
+                        }
                         //close this one
                         this.Close();
                     }
@@ -666,7 +672,7 @@ namespace ReplayTemplate
                                 TextBox tb = (TextBox)temp.Controls[1];
                                 string value = tb.Text;
                                 t.fieldList[i].name = name + ": \n";
-                                t.fieldList[i].value = "[youtube]" + value + "[/youtube]";
+                                t.fieldList[i].value = t.youtubeEmbedStartURL + value + t.youtubeEmbedEndURL;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
@@ -759,7 +765,7 @@ namespace ReplayTemplate
                                 TextBox tb = (TextBox)temp.Controls[1];
                                 string value = tb.Text;
                                 singleFields[i].name = name + ": \n";
-                                singleFields[i].value = "[youtube]" + value + "[/youtube]";
+                                singleFields[i].value = t.youtubeEmbedStartURL + value + t.youtubeEmbedEndURL;
                                 if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
@@ -841,7 +847,7 @@ namespace ReplayTemplate
                                     TextBox tb = (TextBox)temp.Controls[1];
                                     string value = tb.Text;
                                     doubleFields[anotherTemp-singleFields.Count].name = name + ": \n";
-                                    doubleFields[anotherTemp-singleFields.Count].value = "[youtube]" + value + "[/youtube]";
+                                    doubleFields[anotherTemp-singleFields.Count].value = t.youtubeEmbedStartURL + value + t.youtubeEmbedEndURL;
                                     if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
@@ -1145,10 +1151,7 @@ namespace ReplayTemplate
 
         private void sortTemplates()
         {
-            List<Template> sortedTemplates = new List<Template>(templateList);
-            //sortedTemplates.Sort(0,sortedTemplates.Count,string.Compare((sortedTemplates[0].clanName),(sortedTemplates[0].clanName)));
-            //String.Compare(
-            //sortedTemplates.Sort(0,sortedTemplates.Count,
+            templateList.Sort(Template.CompareTemplates);
         }
 
         private void numBattlesComboBox_SelectedIndexChanged(object sender, EventArgs e)

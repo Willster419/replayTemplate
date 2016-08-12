@@ -27,5 +27,9 @@ namespace ReplayTemplate
             else if (templateType == 3) return "[" + clanName + "] - " + "stronghold";
             else return null;
         }
+        public static int CompareTemplates(Template x, Template y)
+        {
+            return x.ToString().CompareTo(y.ToString());
+        }
     }
 }

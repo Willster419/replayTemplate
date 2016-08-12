@@ -1,6 +1,10 @@
-Beta 2:
-Added draw button that specifies loss type i.e. actual loss in battle or technical loss from draw (heldar) (obi)
+Beta 3:
+Created Editor so other clans can create their
+ own tempaltes
 
-Date can now be set for other dates (obi)
+fixed problem with youtube embed tags not being
+ correctly applied
 
-fixed bug with double fields i.e. opponent 1, using only opponent 1 for opponent fields 1, 2, 3, etc
+added a cache history for each clan field event.
+Instead of typing the map name over and over,
+it will remember the map name you typed.
