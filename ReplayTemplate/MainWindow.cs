@@ -21,7 +21,7 @@ namespace ReplayTemplate
          * TODO:
          * optimize code (maybe lol)
          */
-        private string version = "Beta 3";
+        private string version = "Beta 4";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
@@ -71,6 +71,8 @@ namespace ReplayTemplate
         private DateTimePicker dtp;
         private string templateCachePath;
         //Comparer<Template> defaultCompate = Comparer<Template>.Default;
+        private bool pause = true;
+        private List<bool> toggleVisableList = new List<bool>();
         public MainWindow()
         {
             InitializeComponent();
@@ -1385,6 +1387,41 @@ namespace ReplayTemplate
             string filename = cachePath + "\\" + clanName + "\\" + data2[0] + "\\history.txt";
             string data = File.ReadAllText(filename, Encoding.UTF8);
             return data.Split(':');
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+            if (pause)
+            {
+                //toggle the form disabled
+                pauseLabel.Visible = true;
+                //get the current enabled status of specific form contorls saved and write them all to false
+                int temp = this.Controls.Count;
+                foreach (Control c in this.Controls)
+                {
+                    bool controlVisableTemp = c.Enabled;
+                    if (c.Name.Equals("pauseButton"))
+                    {
+                        controlVisableTemp = true;
+                    }
+                    toggleVisableList.Add(controlVisableTemp);
+                    if (!c.Name.Equals("pauseButton")) c.Enabled = false;
+                }
+                pauseButton.Text = "resume";
+                pause = false;
+            }
+            else
+            {
+                //toggle the form enabled
+                pauseLabel.Visible = false;
+                for (int i = 0; i < this.Controls.Count; i++)
+                {
+                    this.Controls[i].Enabled = toggleVisableList[i];
+                }
+                toggleVisableList = new List<bool>();
+                pauseButton.Text = "pause";
+                pause = true;
+            }
         }
     }
 }

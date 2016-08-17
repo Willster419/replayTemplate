@@ -48,6 +48,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.delimiterTextBox = new System.Windows.Forms.TextBox();
             this.clearHistoryButton = new System.Windows.Forms.Button();
+            this.pauseLabel = new System.Windows.Forms.Label();
+            this.pauseButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // createThreadButton
@@ -247,11 +249,33 @@
             this.clearHistoryButton.UseVisualStyleBackColor = true;
             this.clearHistoryButton.Click += new System.EventHandler(this.clearHistoryButton_Click);
             // 
+            // pauseLabel
+            // 
+            this.pauseLabel.AutoSize = true;
+            this.pauseLabel.Location = new System.Drawing.Point(314, 7);
+            this.pauseLabel.Name = "pauseLabel";
+            this.pauseLabel.Size = new System.Drawing.Size(42, 13);
+            this.pauseLabel.TabIndex = 20;
+            this.pauseLabel.Text = "paused";
+            this.pauseLabel.Visible = false;
+            // 
+            // pauseButton
+            // 
+            this.pauseButton.Location = new System.Drawing.Point(291, 23);
+            this.pauseButton.Name = "pauseButton";
+            this.pauseButton.Size = new System.Drawing.Size(75, 23);
+            this.pauseButton.TabIndex = 21;
+            this.pauseButton.Text = "pause";
+            this.pauseButton.UseVisualStyleBackColor = true;
+            this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 536);
+            this.Controls.Add(this.pauseButton);
+            this.Controls.Add(this.pauseLabel);
             this.Controls.Add(this.clearHistoryButton);
             this.Controls.Add(this.delimiterTextBox);
             this.Controls.Add(this.label6);
@@ -303,6 +327,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox delimiterTextBox;
         private System.Windows.Forms.Button clearHistoryButton;
+        private System.Windows.Forms.Label pauseLabel;
+        private System.Windows.Forms.Button pauseButton;
     }
 }
 

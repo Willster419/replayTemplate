@@ -1,10 +1,3 @@
-Beta 3:
-Created Editor so other clans can create their
- own tempaltes
-
-fixed problem with youtube embed tags not being
- correctly applied
-
-added a cache history for each clan field event.
-Instead of typing the map name over and over,
-it will remember the map name you typed.
+Beta 4:
+Added a pause button so editing the form can be
+resumed at a later time (like after the battle)
