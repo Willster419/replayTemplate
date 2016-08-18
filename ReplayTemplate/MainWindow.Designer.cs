@@ -103,7 +103,7 @@
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Location = new System.Drawing.Point(12, 91);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(350, 400);
+            this.panel2.Size = new System.Drawing.Size(354, 400);
             this.panel2.TabIndex = 2;
             // 
             // selectionLabel

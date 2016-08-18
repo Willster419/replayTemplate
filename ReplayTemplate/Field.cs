@@ -15,6 +15,7 @@ namespace ReplayTemplate
         public bool inTitle { get; set; }
         public bool inBody { get; set; }
         public int titleIndex { get; set; }
+        public int nameLength { get; set; }
         public Field(string fieldName, int fieldType = 1)
         {
             name = fieldName;

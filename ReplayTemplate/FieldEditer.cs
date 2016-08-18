@@ -36,7 +36,6 @@ namespace ReplayTemplate
         private DateTimePicker dtp;
         private TextBox titleIndexTB;
         private Label l;
-        private int templateMode = 0;
         private bool loading = false;
         public FieldEditer()
         {

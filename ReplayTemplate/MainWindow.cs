@@ -19,9 +19,10 @@ namespace ReplayTemplate
     {
         /*
          * TODO:
+         * fix bugs as they are found
          * optimize code (maybe lol)
          */
-        private string version = "Beta 4";
+        private string version = "Beta 5";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
@@ -101,7 +102,15 @@ namespace ReplayTemplate
             {
                 if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
                 //download version.txt
-                client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/version.txt", tempPath + "\\version.txt");
+                try
+                {
+                    client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/version.txt", tempPath + "\\version.txt");
+                }
+                catch (WebException)
+                {
+                    MessageBox.Show("Error downloading, eithor you are offline or the update server timmed out");
+                    this.Close();
+                }
                 string newVersion = File.ReadAllText(tempPath + "\\version.txt");
                 if (newVersion.Equals(version))
                 {
@@ -467,15 +476,14 @@ namespace ReplayTemplate
             templateTypeTextBox.Text = "" + displayTemplate.templateType;
             delimiterTextBox.Text = displayTemplate.delimiter;
             //clear the current panel
-            while (panel2.Controls.Count != 0)
-            {
-                panel2.Controls.RemoveAt(0);
-            }
+            panel2.Controls.Clear();
             //fill panel
             for (int i = 0; i < displayTemplate.fieldList.Count; i++)
             {
                 Field f = displayTemplate.fieldList[i];
                 int selection = f.type;
+                //trim the field names just to be safe
+                f.name = f.name.Substring(0, f.nameLength);
                 if (selection == 1)
                 {
                     //standard
@@ -608,7 +616,7 @@ namespace ReplayTemplate
                 Field[] headerList = new Field[99];
                 if (templateComboBox.Text.Equals("create custom..."))
                 {
-
+                    //do nothing
                 }
                 else
                 {
@@ -628,54 +636,49 @@ namespace ReplayTemplate
                             {
                                 //special case victory/defeat
                                 Panel temp = (Panel)panel2.Controls[i];
-                                Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 RadioButton vic = (RadioButton)temp.Controls[1];
                                 RadioButton def = (RadioButton)temp.Controls[2];
-                                RadioButton draw = (RadioButton)temp.Controls[3];
                                 if (vic.Checked)
                                 {
                                     //was victory
-                                    t.fieldList[i].value = "Win";
+                                    f.value = "Win";
                                 }
                                 else if (def.Checked)
                                 {
                                     //was defeat
-                                    t.fieldList[i].value = "Loss (loss)";
+                                    f.value = "Loss (loss)";
                                 }
                                 else
                                 {
                                     //was draw
-                                    t.fieldList[i].value = "Loss (draw)";
+                                    f.value = "Loss (draw)";
                                 }
-                                t.fieldList[i].name = name + ": ";
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                //trim the string to make sure
+                                //f.name = f.name + ": ";
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + ": " + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 2)
                             {
                                 //special case date
                                 Panel temp = (Panel)panel2.Controls[i];
-                                Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 DateTimePicker lValue = (DateTimePicker)temp.Controls[1];
-                                string value = lValue.Text;
-                                t.fieldList[i].name = name + ": ";
-                                t.fieldList[i].value = value;
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                f.value = lValue.Text;
+                                //trim the string to make sure
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + ": " + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 4)
                             {
                                 //special case youtube
                                 Panel temp = (Panel)panel2.Controls[i];
-                                Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 TextBox tb = (TextBox)temp.Controls[1];
-                                string value = tb.Text;
-                                t.fieldList[i].name = name + ": \n";
-                                t.fieldList[i].value = t.youtubeEmbedStartURL + value + t.youtubeEmbedEndURL;
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                f.value = t.youtubeEmbedStartURL + tb.Text + t.youtubeEmbedEndURL;
+                                //trim the string to make sure
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + " (Youtube)" + ": \n" + f.value + "\n\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else
@@ -683,21 +686,20 @@ namespace ReplayTemplate
                                 //normal cases
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 TextBox tb = (TextBox)temp.Controls[1];
-                                string value = tb.Text;
-                                t.fieldList[i].name = name + ": ";
-                                t.fieldList[i].value = value;
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                f.name = lName.Text;
+                                f.value = tb.Text;
+                                //trim the string to make sure
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + ": " + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
-                                this.appendEntry(t.ToString(), name, value);
+                                this.appendEntry(t.ToString(), f.name + ": ", f.value);
                             }
                         }
                     }
                     else
                     {
                         //series or stronghold type template
-
                         //compile list of each
                         foreach (Field f in t.fieldList)
                         {
@@ -722,27 +724,26 @@ namespace ReplayTemplate
                                 //special case victory/defeat
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 RadioButton vic = (RadioButton)temp.Controls[1];
                                 RadioButton def = (RadioButton)temp.Controls[2];
-                                RadioButton draw = (RadioButton)temp.Controls[3];
                                 if (vic.Checked)
                                 {
                                     //was victory
-                                    singleFields[i].value = "Win";
+                                    f.value = "Win";
                                 }
                                 else if (def.Checked)
                                 {
                                     //was defeat
-                                    singleFields[i].value = "Loss (loss)";
+                                    f.value = "Loss (loss)";
                                 }
                                 else
                                 {
                                     //was draw
-                                    singleFields[i].value = "Loss (draw)";
+                                    f.value = "Loss (draw)";
                                 }
-                                singleFields[i].name = name + ": ";
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                //trim the field just to be safe
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + ": " + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 2)
@@ -750,12 +751,12 @@ namespace ReplayTemplate
                                 //special case date
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 DateTimePicker lValue = (DateTimePicker)temp.Controls[1];
-                                string value = lValue.Text;
-                                singleFields[i].name = name + ": ";
-                                singleFields[i].value = value;
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                f.name = lName.Text ;
+                                f.value = lValue.Text;
+                                //trim the field just to be safe
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + ": " + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else if (f.type == 4)
@@ -763,12 +764,12 @@ namespace ReplayTemplate
                                 //special case youtube
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 TextBox tb = (TextBox)temp.Controls[1];
-                                string value = tb.Text;
-                                singleFields[i].name = name + ": \n";
-                                singleFields[i].value = t.youtubeEmbedStartURL + value + t.youtubeEmbedEndURL;
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                f.name = lName.Text ;
+                                f.value = t.youtubeEmbedStartURL + tb.Text + t.youtubeEmbedEndURL;
+                                //trim the field just to be safe
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + " (Youtube)" + ": \n" + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
                             }
                             else
@@ -776,14 +777,14 @@ namespace ReplayTemplate
                                 //normal cases
                                 Panel temp = (Panel)panel2.Controls[i];
                                 Label lName = (Label)temp.Controls[0];
-                                string name = lName.Text;
                                 TextBox tb = (TextBox)temp.Controls[1];
-                                string value = tb.Text;
-                                singleFields[i].name = name + ": ";
-                                singleFields[i].value = value;
-                                if (f.inBody) bodySB.Append(t.fieldList[i].name + t.fieldList[i].value + "\n");
+                                f.name = lName.Text ;
+                                f.value = tb.Text;
+                                //trim the field just to be safe
+                                f.name = f.name.Substring(0, f.nameLength);
+                                if (f.inBody) bodySB.Append(f.name + ": " + f.value + "\n");
                                 if (f.inTitle) headerList[f.titleIndex - 1] = f;
-                                this.appendEntry(t.ToString(), name, value);
+                                this.appendEntry(t.ToString(), f.name + ": ", f.value);
                             }
                         }
                         //run through list of double fields
@@ -795,34 +796,32 @@ namespace ReplayTemplate
                             anotherTemp = singleFields.Count;
                             for (int i = singleFields.Count + ((j - 1) * doubleFields.Count); i < doubleFields.Count + singleFields.Count + ((j - 1) * doubleFields.Count); i++)
                             {
-                                Field f = doubleFields[anotherTemp-singleFields.Count];
+                                int fieldIndex = anotherTemp - singleFields.Count;
+                                Field f = doubleFields[fieldIndex];
                                 if (f.type == 3)
                                 {
                                     //special case victory/defeat
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
-                                    name = name + " " + j;
+                                    f.name = this.parseName(f.name, f.nameLength);
                                     RadioButton vic = (RadioButton)temp.Controls[1];
                                     RadioButton def = (RadioButton)temp.Controls[2];
-                                    RadioButton draw = (RadioButton)temp.Controls[3];
                                     if (vic.Checked)
                                     {
                                         //was victory
-                                        doubleFields[anotherTemp - singleFields.Count].value = "Win";
+                                        f.value = "Win";
                                     }
                                     else if (def.Checked)
                                     {
                                         //was defeat
-                                        doubleFields[anotherTemp - singleFields.Count].value = "Loss (loss)";
+                                        f.value = "Loss (loss)";
                                     }
                                     else
                                     {
                                         //was draw
-                                        doubleFields[anotherTemp - singleFields.Count].value = "Loss (draw)";
+                                        f.value = "Loss (draw)";
                                     }
-                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": ";
-                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
+                                    if (f.inBody) bodySB.Append(f.name + " " + j + ": " + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else if (f.type == 2)
@@ -830,13 +829,10 @@ namespace ReplayTemplate
                                     //special case date
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
-                                    name = name + " " + j;
+                                    f.name = this.parseName(f.name, f.nameLength);
                                     DateTimePicker lValue = (DateTimePicker)temp.Controls[1];
-                                    string value = lValue.Text;
-                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": ";
-                                    doubleFields[anotherTemp-singleFields.Count].value = value;
-                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
+                                    f.value = lValue.Text;
+                                    if (f.inBody) bodySB.Append(f.name + " " + j + ": " + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else if (f.type == 4)
@@ -844,13 +840,10 @@ namespace ReplayTemplate
                                     //special case youtube
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
-                                    name = name + " " + j;
+                                    f.name = this.parseName(f.name, f.nameLength);
                                     TextBox tb = (TextBox)temp.Controls[1];
-                                    string value = tb.Text;
-                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": \n";
-                                    doubleFields[anotherTemp-singleFields.Count].value = t.youtubeEmbedStartURL + value + t.youtubeEmbedEndURL;
-                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
+                                    f.value = t.youtubeEmbedStartURL + tb.Text + t.youtubeEmbedEndURL;
+                                    if (f.inBody) bodySB.Append(f.name + " " + j + ": \n" + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
                                 }
                                 else
@@ -858,16 +851,12 @@ namespace ReplayTemplate
                                     //normal cases
                                     Panel temp = (Panel)panel2.Controls[i];
                                     Label lName = (Label)temp.Controls[0];
-                                    string name = this.parseName(doubleFields[anotherTemp - singleFields.Count].name, origionalLengths[anotherTemp - singleFields.Count]);
-                                    string tempp = name;
-                                    name = name + " " + j;
+                                    f.name = this.parseName(f.name, f.nameLength);
                                     TextBox tb = (TextBox)temp.Controls[1];
-                                    string value = tb.Text;
-                                    doubleFields[anotherTemp-singleFields.Count].name = name + ": ";
-                                    doubleFields[anotherTemp-singleFields.Count].value = value;
-                                    if (f.inBody) bodySB.Append(t.fieldList[anotherTemp].name + t.fieldList[anotherTemp].value + "\n");
+                                    f.value = tb.Text;
+                                    if (f.inBody) bodySB.Append(f.name + " " + j + ": " + t.fieldList[anotherTemp].value + "\n");
                                     if (f.inTitle) headerList[f.titleIndex - 1] = f;
-                                    this.appendEntry(t.ToString(), tempp, value);
+                                    this.appendEntry(t.ToString(), f.name, f.value);
                                 }
                                 anotherTemp++;
                             }
@@ -885,10 +874,15 @@ namespace ReplayTemplate
                                 //last single header event, don't add space
                                 titleSB.Append(headerList[k].value);
                             }
+                            else if (t.templateType == 2)
+                            {
+                                //last series header event, add type
+                                titleSB.Append(headerList[k].value + t.delimiter + "series");
+                            }
                             else
                             {
-                                //last sh or series header event, add type
-                                titleSB.Append(headerList[k].value + t.delimiter + t.templateType);
+                                //last sh header event, add type
+                                titleSB.Append(headerList[k].value + t.delimiter + "stronghold");
                             }
                             
                         }
@@ -1109,6 +1103,9 @@ namespace ReplayTemplate
                                                         case "titleIndex":
                                                             f.titleIndex = int.Parse(templateReader.ReadString());
                                                             break;
+                                                        case "nameLength":
+                                                            f.nameLength = int.Parse(templateReader.ReadString());
+                                                            break;
                                                         //type HAS to be last thing read from each field node for this to work
                                                         case "type":
                                                             f.type = int.Parse(templateReader.ReadString());
@@ -1212,21 +1209,6 @@ namespace ReplayTemplate
                 //process series/landing battles
                 battleCount = numBattlesComboBox.SelectedIndex + 2;
             }
-                //get the origional length of each item in the temp list. don't run it if the index didn't change
-                int currentTemplateComboBoxSelectedIndex = templateComboBox.SelectedIndex;
-                if (currentTemplateComboBoxSelectedIndex == lastTemplateComboBoxSelectedIndex)
-                {
-                    //don't run it
-                }
-                else
-                {
-                    //run it
-                    origionalLengths = new List<int>();
-                    foreach (Field f in tempList)
-                    {
-                        origionalLengths.Add(f.name.Length);
-                    }
-                }
                 //for each battle, for each item in the array, add it to the list
                 for (int i = currentBattle; i < battleCount + 1; i++)
                 {
@@ -1236,31 +1218,30 @@ namespace ReplayTemplate
                         if (selection == 1)
                         {
                             //standard
-                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
+                            tempList[j].name = this.parseName(tempList[j].name, tempList[j].nameLength);
                             this.addStandard(displayTemplate, tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 2)
                         {
                             //date
-                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
+                            tempList[j].name = this.parseName(tempList[j].name, tempList[j].nameLength);
                             this.addDate(tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 3)
                         {
                             //victoryDefeat
-                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
+                            tempList[j].name = this.parseName(tempList[j].name, tempList[j].nameLength);
                             this.addVictoryDefeat(tempList[j], tempList[j].name + " " + i);
                         }
                         else if (selection == 4)
                         {
                             //youtube
-                            tempList[j].name = this.parseName(tempList[j].name, origionalLengths[j]);
+                            tempList[j].name = this.parseName(tempList[j].name, tempList[j].nameLength);
                             this.addYoutube(tempList[j], tempList[j].name + " " + i);
                         }
                         else
                         {
-                            MessageBox.Show("Database error. The program can continue not and must exit.");
-                            //this.Dispose();
+                            MessageBox.Show("Database error. The program must exit. Tell Willster419 he screwed up. A lot.");
                             this.Close();
                         }
                     }

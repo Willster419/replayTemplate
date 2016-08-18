@@ -1,106 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <templateLists.xml>
   <templates>
-  <template>
-      <clanName>URMOM</clanName>
-      <threadURL>http://relicgaming.com/index.php?action=post;board=24.0</threadURL>
-      <youtubeEmbedStartURL>[youtrube]</youtubeEmbedStartURL>
-      <youtubeEmbedEndURL>[/youtrube]</youtubeEmbedEndURL>
-      <numFields>12</numFields>
-      <templateType>1</templateType>
-	  <delimiter> - </delimiter>
-      <fields>
-        <field>
-          <name>Date</name>
-          <duplicate>False</duplicate>
-		  <inTitle>True</inTitle>
-		  <inBody>True</inBody>
-		  <titleIndex>1</titleIndex>
-          <type>2</type>
-        </field>
-		<field>
-          <name>Opponent</name>
-          <duplicate>False</duplicate>
-		  <inTitle>True</inTitle>
-		  <inBody>True</inBody>
-		  <titleIndex>3</titleIndex>
-          <type>1</type>
-        </field>
-        <field>
-          <name>Province</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>1</type>
-        </field>
-        <field>
-          <name>Map</name>
-          <duplicate>False</duplicate>
-		  <inTitle>True</inTitle>
-		  <inBody>True</inBody>
-		  <titleIndex>2</titleIndex>
-          <type>1</type>
-        </field>
-        <field>
-          <name>FC</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>1</type>
-        </field>
-		<field>
-          <name>Att/Def</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>1</type>
-        </field>
-        <field>
-          <name>Strat</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>1</type>
-        </field>
-        <field>
-          <name>Strat</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>4</type>
-        </field>
-		<field>
-          <name>Tier</name>
-          <duplicate>False</duplicate>
-		  <inTitle>True</inTitle>
-		  <inBody>False</inBody>
-		  <titleIndex>4</titleIndex>
-          <type>1</type>
-        </field>
-        <field>
-          <name>Result</name>
-          <duplicate>False</duplicate>
-		  <inTitle>True</inTitle>
-		  <inBody>True</inBody>
-		  <titleIndex>5</titleIndex>
-          <type>3</type>
-        </field>
-        <field>
-          <name>Replay File</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>1</type>
-        </field>
-        <field>
-          <name>Battle</name>
-          <duplicate>False</duplicate>
-		  <inTitle>False</inTitle>
-		  <inBody>True</inBody>
-          <type>4</type>
-        </field>
-      </fields>
-    </template>
     <template>
       <clanName>REL2</clanName>
       <threadURL>http://relicgaming.com/index.php?action=post;board=24.0</threadURL>
@@ -116,6 +16,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>1</titleIndex>
+		  <nameLength>4</nameLength>
           <type>2</type>
         </field>
 		<field>
@@ -124,6 +25,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>3</titleIndex>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -131,6 +33,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -139,6 +42,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>2</titleIndex>
+		  <nameLength>3</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -146,6 +50,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>2</nameLength>
           <type>1</type>
         </field>
 		<field>
@@ -153,6 +58,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>7</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -160,6 +66,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>5</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -167,6 +74,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>5</nameLength>
           <type>4</type>
         </field>
 		<field>
@@ -175,6 +83,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>False</inBody>
 		  <titleIndex>4</titleIndex>
+		  <nameLength>4</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -183,6 +92,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>5</titleIndex>
+		  <nameLength>6</nameLength>
           <type>3</type>
         </field>
         <field>
@@ -190,6 +100,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>11</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -197,6 +108,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>6</nameLength>
           <type>4</type>
         </field>
       </fields>
@@ -216,6 +128,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>1</titleIndex>
+		  <nameLength>4</nameLength>
           <type>2</type>
         </field>
         <field>
@@ -223,6 +136,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -231,6 +145,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>2</titleIndex>
+		  <nameLength>3</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -238,6 +153,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>2</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -245,6 +161,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>5</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -252,6 +169,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>5</nameLength>
           <type>4</type>
         </field>
 		<field>
@@ -260,6 +178,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>False</inBody>
 		  <titleIndex>3</titleIndex>
+		  <nameLength>4</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -267,6 +186,7 @@
           <duplicate>True</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -274,6 +194,7 @@
           <duplicate>True</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>6</nameLength>
           <type>3</type>
         </field>
         <field>
@@ -281,6 +202,7 @@
           <duplicate>True</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>11</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -288,6 +210,7 @@
           <duplicate>True</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>6</nameLength>
           <type>4</type>
         </field>
       </fields>
@@ -307,6 +230,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>1</titleIndex>
+		  <nameLength>4</nameLength>
           <type>2</type>
         </field>
 		<field>
@@ -315,6 +239,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>2</titleIndex>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
 		<field>
@@ -322,6 +247,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>2</nameLength>
           <type>1</type>
         </field>
 		<field>
@@ -330,6 +256,7 @@
 		  <inTitle>True</inTitle>
 		  <inBody>True</inBody>
 		  <titleIndex>3</titleIndex>
+		  <nameLength>4</nameLength>
           <type>1</type>
         </field>
 		<field>
@@ -337,6 +264,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>6</nameLength>
           <type>4</type>
         </field>
         <field>
@@ -344,6 +272,7 @@
           <duplicate>True</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>3</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -351,6 +280,7 @@
           <duplicate>True</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>6</nameLength>
           <type>3</type>
         </field>
       </fields>
@@ -369,6 +299,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>4</nameLength>
           <type>2</type>
         </field>
         <field>
@@ -376,6 +307,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -383,6 +315,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>8</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -390,6 +323,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>2</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -397,6 +331,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>7</nameLength>
           <type>1</type>
         </field>
         <field>
@@ -404,6 +339,7 @@
           <duplicate>False</duplicate>
 		  <inTitle>False</inTitle>
 		  <inBody>True</inBody>
+		  <nameLength>6</nameLength>
           <type>3</type>
         </field>
       </fields>

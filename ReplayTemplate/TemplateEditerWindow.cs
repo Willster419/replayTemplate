@@ -39,10 +39,7 @@ namespace ReplayTemplate
         private TextOutputWindow textOut = new TextOutputWindow();
         StringBuilder bodySB;
         StringBuilder titleSB;
-        int battleCount = 1;
         private List<int> origionalLengths = new List<int>();
-        private bool firstTimeLandingStronghold = true;
-        int lastSelected = 0;
         private XmlTextWriter templateWriter;
         private XmlTextReader templateReader;
         bool editMode = true;
@@ -681,6 +678,9 @@ namespace ReplayTemplate
                                                         case "titleIndex":
                                                             f.titleIndex = int.Parse(templateReader.ReadString());
                                                             break;
+                                                        case "nameLength":
+                                                            f.nameLength = int.Parse(templateReader.ReadString());
+                                                            break;
                                                         //type HAS to be last thing read from each field node for this to work
                                                         case "type":
                                                             f.type = int.Parse(templateReader.ReadString());
@@ -747,6 +747,7 @@ namespace ReplayTemplate
                 templateWriter.WriteElementString("inTitle", "" + field.inTitle);
                 templateWriter.WriteElementString("inBody", "" + field.inBody);
                 if(field.inTitle) templateWriter.WriteElementString("titleIndex", "" + field.titleIndex);
+                templateWriter.WriteElementString("nameLength", "" + field.name.Length);
                 templateWriter.WriteElementString("type", "" + field.type);
                 templateWriter.WriteEndElement();
             }

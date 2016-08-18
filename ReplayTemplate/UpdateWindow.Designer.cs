@@ -92,6 +92,7 @@
             this.Controls.Add(this.updateQuestionlabel);
             this.Controls.Add(this.updateNotesRTB);
             this.Controls.Add(this.updateAvailableLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "UpdateWindow";
             this.Text = "UpdateWindow";
             this.ResumeLayout(false);
