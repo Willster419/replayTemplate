@@ -1,3 +1,6 @@
+Beta 6:
+Updated url links
+
 Beta 5:
 Fixed a problem where when a series type battle was selected,
 the duplicate fields names would not formar properly (thanks shrew)

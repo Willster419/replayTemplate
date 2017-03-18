@@ -22,7 +22,7 @@ namespace ReplayTemplate
          * fix bugs as they are found
          * optimize code (maybe lol)
          */
-        private string version = "Beta 5";
+        private string version = "Beta 6";
         private static int DELIMITER = 3;
         private static int CHECKBOX_DELIMITER = 1;
         private static int PANEL_WIDTH = 330;
@@ -102,24 +102,24 @@ namespace ReplayTemplate
             {
                 if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
                 //download version.txt
+                string newVersion = "";
                 try
                 {
-                    client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/version.txt", tempPath + "\\version.txt");
+                    newVersion = client.DownloadString("http://willster419.atwebpages.com/Applications/ReplayTemplate/version.txt");
                 }
                 catch (WebException)
                 {
                     MessageBox.Show("Error downloading, eithor you are offline or the update server timmed out");
                     this.Close();
                 }
-                string newVersion = File.ReadAllText(tempPath + "\\version.txt");
                 if (newVersion.Equals(version))
                 {
                     //up to date
                 }
                 else
                 {
-                    //download updateNotes.txt
-                    client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/updateNotes.txt", tempPath + "\\updateNotes.txt");
+                    //download updateNotes.txt"http://willster419.atwebpages.com/Applications/"
+                    client.DownloadFile("http://willster419.atwebpages.com/Applications/ReplayTemplate/updateNotes.txt", tempPath + "\\updateNotes.txt");
                     //prompt user
                     uw.updateNotesRTB.Text = File.ReadAllText(tempPath + "\\updateNotes.txt");
                     uw.updateAvailableLabel.Text = "An update is available: " + newVersion;
@@ -128,7 +128,7 @@ namespace ReplayTemplate
                     {
                         //download new version
                         string temp = Path.GetFullPath(Application.StartupPath);
-                        client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/ReplayTemplate.exe", temp + "\\replayTemplate V_" + newVersion + ".exe");
+                        client.DownloadFile("http://willster419.atwebpages.com/Applications/ReplayTemplate/ReplayTemplate.exe", temp + "\\replayTemplate V_" + newVersion + ".exe");
                         //open new one
                         try
                         {
@@ -160,7 +160,7 @@ namespace ReplayTemplate
                 //delete templates xml if it exists
                 if (File.Exists(tempPath + "\\templateLists.xml")) File.Delete(tempPath + "\\templateLists.xml");
                 //download latest
-                client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/ReplayTemplate/templateLists.xml", tempPath + "\\templateLists.xml");
+                client.DownloadFile("http://willster419.atwebpages.com/Applications/ReplayTemplate/templateLists.xml", tempPath + "\\templateLists.xml");
             }
         }
 
@@ -553,19 +553,15 @@ namespace ReplayTemplate
             pw.setMessage("parsing paths");
             pw.Show();
             Application.DoEvents();
-            System.Threading.Thread.Sleep(100);
             this.parsePaths();
             pw.setMessage("Checking for updates...");
             Application.DoEvents();
-            System.Threading.Thread.Sleep(100);
             this.checkForUpdates();
             pw.setMessage("Checking for files...");
             Application.DoEvents();
-            System.Threading.Thread.Sleep(100);
             this.checkForFiles();
             pw.setMessage("Loading templates...");
             Application.DoEvents();
-            System.Threading.Thread.Sleep(100);
             this.loadTemplates();
             this.Text = "ReplayTemplate version " + version;
             pw.Close();
